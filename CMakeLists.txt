@@ -23,6 +23,7 @@ add_library(oculobo
 	src/vao
 	src/vbo
 	src/ebo
+	src/error_display
 )
 target_link_libraries(oculobo
 	OpenGL::GL

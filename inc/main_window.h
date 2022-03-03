@@ -15,17 +15,20 @@
 #include "shader_loader.h"
 #include "vao.h"
 #include "vbo.h"
+#include "error_display.h"
 
 class MainWindow {
    private:
     GLFWwindow* window_;
     int window_width_;
     int window_height_;
+	/* Interactivity flags */
     bool verbose_;
-    std::string main_window_name = "Oculobo 2022v0.1";
+	bool debug_;
+    std::string main_window_name_ = "Oculobo 2022v0.1";
 
    public:
-    MainWindow(int width = 640, int height = 480, bool verbose = true);
+    MainWindow(int width = 640, int height = 480, bool verbose = true, bool debug = true);
     /**
      * Opens a window
      */

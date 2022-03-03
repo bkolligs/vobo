@@ -1,7 +1,13 @@
 #include "main_window.h"
 
-MainWindow::MainWindow(int width, int height, bool verbose)
-    : window_width_{width}, window_height_{height}, verbose_{verbose} {
+void GLAPIENTRY errorCallback(GLenum source, GLenum type, GLuint id,
+                              GLenum severity, GLsizei length,
+                              const GLchar* message, const void* userParam) {
+    handleErrorDisplay(source, type, id, severity, length, message, userParam);
+}
+
+MainWindow::MainWindow(int width, int height, bool verbose, bool debug)
+    : window_width_{width}, window_height_{height}, verbose_{verbose}, debug_{debug} {
     int result = initialize();
 }
 
@@ -14,9 +20,11 @@ int MainWindow::initialize() {
 
     verbose_ and std::cout << SUCCESS_INFO("Initialized GLFW") << std::endl;
 
+    /* Enable the Debug context for GLFW */
+    if (debug_) glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     /* Create a windowed mode window and its OpenGL context */
     window_ = glfwCreateWindow(window_width_, window_height_,
-                               main_window_name.c_str(), NULL, NULL);
+                               main_window_name_.c_str(), NULL, NULL);
     if (!window_) {
         std::cerr << ERROR_INFO("Failed to create GLFW window") << std::endl;
         glfwTerminate();
@@ -32,13 +40,19 @@ int MainWindow::initialize() {
         return -1;
     }
 
+    /* Enable the error callback */
+    
+    if (debug_){
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        glDebugMessageCallback(errorCallback, 0);
+    }
+
     verbose_ and std::cout << SUCCESS_INFO("Initialized OpenGL") << std::endl
                            << "Using OpenGL version: "
                            << glGetString(GL_VERSION) << std::endl;
 
     return 0;
 }
-
 int MainWindow::open() {
     /* generate a buffer to store the vertices of the triangle */
     float vertices[] = {
@@ -86,7 +100,8 @@ int MainWindow::open() {
 
         // glUseProgram(shaderProgram);
         shaders.activate();
-        /* bind the vertex array object so we use it, otherwise we get a SegFault*/
+        /* bind the vertex array object so we use it, otherwise we get a
+         * SegFault*/
         vao1.bind();
         /* draw the triangles */
         glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
