@@ -42,9 +42,9 @@ ShaderLoader::ShaderLoader(const std::string& shaderFile, bool verbose) {
     }
 }
 
-ShaderLoader::~ShaderLoader() {}
+ShaderLoader::~ShaderLoader() { free(); }
 void ShaderLoader::activate() { glUseProgram(programID_); }
-void ShaderLoader::deactivate() { glDeleteProgram(programID_); }
+void ShaderLoader::free() { glDeleteProgram(programID_); }
 
 uint ShaderLoader::compileShader(const std::string& source, uint type) {
     /* Create a shader of the type specified */
@@ -64,10 +64,14 @@ uint ShaderLoader::compileShader(const std::string& source, uint type) {
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
         char* message = (char*)alloca(length * sizeof(char));
         glGetShaderInfoLog(id, length, &length, message);
-        std::cout << "Failed to compile "
-                  << (type == GL_VERTEX_SHADER ? "vertex" : "fragment")
-                  << "shader!" << std::endl;
-        std::cout << message << std::endl;
+
+        std::stringstream errorMessage;
+        errorMessage << ERROR_INFO(
+                            "[ShaderLoader] Failed to compile shader of type: ")
+                     << (type == GL_VERTEX_SHADER ? "vertex" : "fragment")
+                     << std::endl
+                     << message << std::endl;
+        throw(std::runtime_error(errorMessage.str()));
     }
     return id;
 }

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(OCULOBO CXX)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a")
 
 
 set(USE_SANITIZER FALSE)
@@ -17,11 +17,14 @@ find_package(GLEW REQUIRED)
 
 include_directories(inc)
 
-add_library(main_window 
+add_library(oculobo 
 	src/main_window
 	src/shader_loader
+	src/vao
+	src/vbo
+	src/ebo
 )
-target_link_libraries(main_window
+target_link_libraries(oculobo
 	OpenGL::GL
 	glfw
 	GLEW
@@ -29,16 +32,7 @@ target_link_libraries(main_window
 
 add_executable(triangle src/triangle)
 target_link_libraries(triangle
-	main_window
-	OpenGL::GL
-	glfw
-	GLEW
-)
-
-# Testing executable for openGL
-add_executable(test src/test)
-target_link_libraries(test
-	main_window
+	oculobo
 	OpenGL::GL
 	glfw
 	GLEW

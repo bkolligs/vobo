@@ -9,6 +9,7 @@ PointerAlignment: Left
 
 # Ben's personal stuff
 IndentWidth: 4
+AlignTrailingComments: true
 
 
 IncludeBlocks: Merge

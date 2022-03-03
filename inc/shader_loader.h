@@ -1,3 +1,6 @@
+#ifndef _shader_loader_h_
+#define _shader_loader_h_
+
 #include "colored_output_strings.h"
 #include <GL/glew.h>
 #include <array>
@@ -27,7 +30,9 @@ class ShaderLoader {
     ShaderLoader(const std::string& shaderFile, bool verbose = true);
     ~ShaderLoader();
     void activate();
-    void deactivate();
+    void free();
     ShaderSource getFileContents(const std::string& fileName);
-	uint compileShader(const std::string& source, uint type);
+    uint compileShader(const std::string& source, uint type);
 };
+
+#endif  //_shader_loader_h_ header
