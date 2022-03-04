@@ -102,7 +102,7 @@ int MainWindow::open() {
     vbo1.unbind();
     ebo1.unbind();
 
-    int location = glGetUniformLocation(shaders.programID, "u_Color");
+    int location = glGetUniformLocation(shaders.getProgramID(), "u_Color");
     if (location == -1) {
         std::cout << ERROR_INFO("Could not find Uniform!") << std::endl;
     }

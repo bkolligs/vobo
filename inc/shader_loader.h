@@ -23,15 +23,16 @@ class ShaderLoader {
    private:
     uint shaderCount_;
     bool verbose_;
+    uint programID_;
 
    public:
-    uint programID;
     ShaderLoader();
     ShaderLoader(const std::string& shaderFile, bool verbose = true);
     ~ShaderLoader();
     void activate();
     ShaderSource getFileContents(const std::string& fileName);
     uint compileShader(const std::string& source, uint type);
+    uint getProgramID(){return programID_;}
 };
 
 #endif  //_shader_loader_h_ header

@@ -3,7 +3,7 @@
 EBO::EBO(unsigned int* indices, int size) {
     glGenBuffers(1, &id);
     bind();
-    /* Link the data to the element array buffer indices */
+    /* Link the data to the element/index array buffer indices */
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
 }
 
