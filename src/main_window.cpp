@@ -82,56 +82,47 @@ int MainWindow::open() {
     };
 
     /* generate a vertex array and bind it */
-    VAO vao1;
+    VertexArray vao1;
     vao1.bind();
 
-    VBO vbo1(vertices, sizeof(vertices));
+    VertexBuffer vbo1(vertices, sizeof(vertices));
     vbo1.bind();
 
     /* Generates an element array buffer object and links to indices */
-    EBO ebo1(indices, sizeof(indices));
+    ElementBuffer ebo1(indices, sizeof(indices));
 
     /* link the vertex array and buffer objects */
     vao1.linkVBO(vbo1, 0);
 
     /* Produce the shaders */
-    ShaderLoader shaders("../src/shaders.shader");
+    Shader shaders("../src/assets/shaders/shaders.shader");
 
     /* Unbind to prevent accidental modifications */
     vao1.unbind();
     vbo1.unbind();
     ebo1.unbind();
 
-    int location = glGetUniformLocation(shaders.getProgramID(), "u_Color");
-    if (location == -1) {
-        std::cout << ERROR_INFO("Could not find Uniform!") << std::endl;
-    }
-
     /* Make a nice animation for the triangles */
     float r = 0.0;
     float increment = 0.01f;
 
+    /* Create a renderer class */
+    Renderer renderer;
+
     /* Loop until the user closes the window_ */
     while (!glfwWindowShouldClose(window_)) {
-        /* Specify the color of the background */
-        glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        renderer.clear();
 
-        shaders.activate();
-        glUniform4f(location, r, 0.4f, 0.1f, 0.5f);
-
+        /* Render something to the screen! */
+        renderer.draw(vao1, ebo1, shaders);
+        /* Should use a material here instead of this, add this later */
+        shaders.setUniform4F("u_Color", r, 0.4f, 0.1f, 0.5f);
         if (r > 1.0f)
             increment = -0.01f;
         else if (r < 0.0f)
             increment = 0.01f;
 
         r += increment;
-        /* bind the vertex array object so we use it, otherwise we get a
-         * SegFault*/
-        vao1.bind();
-        /* draw the triangles */
-        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window_);
@@ -139,7 +130,6 @@ int MainWindow::open() {
         /* Poll for and process events */
         glfwPollEvents();
     }
-
 
     return 0;
 }

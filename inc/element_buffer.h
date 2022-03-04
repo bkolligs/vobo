@@ -6,17 +6,18 @@
 /**
  * Element buffer object for using indices
  */
-class EBO {
+class ElementBuffer {
    public:
-    unsigned int id;
+    unsigned int renderID_;
+    int count_;
     /**
      * Generates an element buffer arrray and links it to indices
      */
-    EBO(unsigned int* indices, int size);
-    ~EBO();
-    void bind();
-    void unbind();
+    ElementBuffer(unsigned int* indices, int count);
+    ~ElementBuffer();
+    void bind() const;
+    void unbind() const;
+    int getCount() const { return count_; }
 };
-
 
 #endif  //_element_buffer_h_ header

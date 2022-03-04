@@ -1,7 +1,7 @@
 #ifndef _error_h_
 #define _error_h_
 
-#include "colored_output_strings.h"
+#include "utils.h"
 #include <GL/glew.h>
 #include <iostream>
 

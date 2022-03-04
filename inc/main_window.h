@@ -1,7 +1,6 @@
 #ifndef _main_window_h_
 #define _main_window_h_
 
-#include "colored_output_strings.h"
 #include <iostream>
 
 // include GLEW which allows us to access the modern GL
@@ -11,25 +10,28 @@
 // GLM contains math functions we will use
 #include <glm/glm.hpp>
 // custom abstractions
-#include "ebo.h"
-#include "shader_loader.h"
-#include "vao.h"
-#include "vbo.h"
+#include "element_buffer.h"
 #include "error_display.h"
+#include "shader.h"
+#include "utils.h"
+#include "vertex_array.h"
+#include "vertex_buffer.h"
+#include "renderer.h"
 
 class MainWindow {
    private:
     GLFWwindow* window_;
     int window_width_;
     int window_height_;
-	/* Interactivity flags */
+    /* Interactivity flags */
     bool verbose_;
-	bool debug_;
+    bool debug_;
     std::string main_window_name_ = "Oculobo 2022v0.1";
 
    public:
-    MainWindow(int width = 640, int height = 480, bool verbose = true, bool debug = true);
-	~MainWindow();
+    MainWindow(int width = 640, int height = 480, bool verbose = true,
+               bool debug = true);
+    ~MainWindow();
     /**
      * Opens a window
      */

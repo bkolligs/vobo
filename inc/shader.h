@@ -1,9 +1,10 @@
-#ifndef _shader_loader_h_
-#define _shader_loader_h_
+#ifndef _shader_h_
+#define _shader_h_
 
-#include "colored_output_strings.h"
+#include "utils.h"
 #include <GL/glew.h>
 #include <array>
+#include <unordered_map>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -19,20 +20,25 @@ struct ShaderSource {
                                     const ShaderSource& source);
 };
 
-class ShaderLoader {
+class Shader {
    private:
     uint shaderCount_;
     bool verbose_;
     uint programID_;
+    /* Place to store the locations of particular uniforms that have been found already */
+    std::unordered_map<std::string, int> uniformCache_;
 
    public:
-    ShaderLoader();
-    ShaderLoader(const std::string& shaderFile, bool verbose = true);
-    ~ShaderLoader();
-    void activate();
+    Shader();
+    Shader(const std::string& shaderFile, bool verbose = true);
+    ~Shader();
+    void bind() const;
     ShaderSource getFileContents(const std::string& fileName);
     uint compileShader(const std::string& source, uint type);
     uint getProgramID(){return programID_;}
+    int getUniformLocation(const std::string&name);
+    /* Set a uniform of type 4 float, default color is white */
+    void setUniform4F(const std::string& name, float v0=0.0f, float v1 = 0.0f, float v2=0.0f, float v3=0.0f);
 };
 
-#endif  //_shader_loader_h_ header
+#endif  //_shader_h_ header

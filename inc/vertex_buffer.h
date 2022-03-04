@@ -6,13 +6,13 @@
 /**
  * Vertex buffer object for OpenGL
  */
-class VBO {
+class VertexBuffer {
    public:
-    unsigned int id;
-    VBO(float* vertices, int size);
-    ~VBO();
-    void bind();
-    void unbind();
+    unsigned int renderID_;
+    VertexBuffer(float* vertices, int size);
+    ~VertexBuffer();
+    void bind() const;
+    void unbind() const;
 };
 
 #endif  //_vertex_buffer_h_ header

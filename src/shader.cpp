@@ -1,4 +1,4 @@
-#include "shader_loader.h"
+#include "shader.h"
 
 /* Print out the shader source struct nicely */
 std::ostream& operator<<(std::ostream& os, const ShaderSource& source) {
@@ -8,8 +8,8 @@ std::ostream& operator<<(std::ostream& os, const ShaderSource& source) {
     return os;
 }
 
-ShaderLoader::ShaderLoader() {}
-ShaderLoader::ShaderLoader(const std::string& shaderFile, bool verbose) {
+Shader::Shader() {}
+Shader::Shader(const std::string& shaderFile, bool verbose) : verbose_{verbose} {
     try {
         /* Load the shaders into the strings */
         ShaderSource shaderSource = getFileContents(shaderFile);
@@ -42,10 +42,10 @@ ShaderLoader::ShaderLoader(const std::string& shaderFile, bool verbose) {
     }
 }
 
-ShaderLoader::~ShaderLoader() {  glDeleteProgram(programID_); }
-void ShaderLoader::activate() { glUseProgram(programID_); }
+Shader::~Shader() {  glDeleteProgram(programID_); }
+void Shader::bind() const { glUseProgram(programID_); }
 
-uint ShaderLoader::compileShader(const std::string& source, uint type) {
+uint Shader::compileShader(const std::string& source, uint type) {
     /* Create a shader of the type specified */
     uint id = glCreateShader(type);
     const char* src = source.c_str();
@@ -66,7 +66,7 @@ uint ShaderLoader::compileShader(const std::string& source, uint type) {
 
         std::stringstream errorMessage;
         errorMessage << ERROR_INFO(
-                            "[ShaderLoader] Failed to compile shader of type: ")
+                            "[Shader] Failed to compile shader of type: ")
                      << (type == GL_VERTEX_SHADER ? "vertex" : "fragment")
                      << std::endl
                      << message << std::endl;
@@ -75,7 +75,7 @@ uint ShaderLoader::compileShader(const std::string& source, uint type) {
     return id;
 }
 
-ShaderSource ShaderLoader::getFileContents(const std::string& fileName) {
+ShaderSource Shader::getFileContents(const std::string& fileName) {
     std::ifstream input(fileName, std::ios::binary);
     /* The point of this is to index into our content vector */
     enum class ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1 };
@@ -102,15 +102,38 @@ ShaderSource ShaderLoader::getFileContents(const std::string& fileName) {
         }
 
         verbose_ and std::cout
-            << SUCCESS_INFO("[ShaderLoader] Loaded shaders from: ") << fileName
+            << SUCCESS_INFO("[Shader] Loaded shaders from: ") << fileName
             << std::endl;
         return {contents.at(0).str(), contents.at(1).str()};
     }
 
     else {
         char message[40 + fileName.size()];
-        sprintf(message, ERROR_INFO("[ShaderLoader] Unable to open file: '%s'"),
+        sprintf(message, ERROR_INFO("[Shader] Unable to open file: '%s'"),
                 fileName.c_str());
         throw std::invalid_argument(message);
     }
+}
+
+void Shader::setUniform4F(const std::string& name, float v0, float v1, float v2, float v3) {
+    /* Set the uniform at the location we gather */
+    int location = getUniformLocation(name);
+    glUniform4f(location, v0, v1, v2, v3);
+}
+
+int Shader::getUniformLocation(const std::string&name) {
+    /* Check if we have cached the uniform and if so access the hash map */
+    if (uniformCache_.find(name) != uniformCache_.end()) {
+        return uniformCache_[name];
+    }
+    /* Get the uniform location in the current shader program */
+    int location = glGetUniformLocation(programID_, name.c_str());
+    if (location == -1) {
+        std::cout << ERROR_INFO("Could not find uniform: ") << name << std::endl;
+    }
+
+    verbose_ and std::cout << "[Shader] Caching uniform: " << name << std::endl;
+	/* Cache the uniform */
+    uniformCache_[name] = location;
+    return location;
 }

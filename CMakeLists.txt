@@ -19,11 +19,12 @@ include_directories(inc)
 
 add_library(oculobo 
 	src/main_window
-	src/shader_loader
-	src/vao
-	src/vbo
-	src/ebo
+	src/shader
+	src/vertex_array
+	src/vertex_buffer
+	src/element_buffer
 	src/error_display
+	src/renderer
 )
 target_link_libraries(oculobo
 	OpenGL::GL
