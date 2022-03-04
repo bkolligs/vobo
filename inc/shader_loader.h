@@ -21,16 +21,15 @@ struct ShaderSource {
 
 class ShaderLoader {
    private:
-    uint programID_;
     uint shaderCount_;
     bool verbose_;
 
    public:
+    uint programID;
     ShaderLoader();
     ShaderLoader(const std::string& shaderFile, bool verbose = true);
     ~ShaderLoader();
     void activate();
-    void free();
     ShaderSource getFileContents(const std::string& fileName);
     uint compileShader(const std::string& source, uint type);
 };

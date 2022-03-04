@@ -2,7 +2,7 @@
 
 int main(int argc, char const *argv[])
 {
-	MainWindow window;
+	MainWindow window(640, 480, true, true);
 	// open a window
 	int result = window.open();
 

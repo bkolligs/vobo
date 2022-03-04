@@ -2,7 +2,7 @@
 
 VAO::VAO() { glGenVertexArrays(1, &id); }
 
-VAO::~VAO() { free(); }
+VAO::~VAO() { glDeleteVertexArrays(1, &id); }
 
 void VAO::linkVBO(VBO& vbo, unsigned int layout) {
     vbo.bind();
@@ -15,4 +15,3 @@ void VAO::linkVBO(VBO& vbo, unsigned int layout) {
 
 void VAO::bind() { glBindVertexArray(id); }
 void VAO::unbind() { glBindVertexArray(0); }
-void VAO::free() { glDeleteVertexArrays(1, &id); }

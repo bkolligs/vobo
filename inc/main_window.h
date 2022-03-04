@@ -29,6 +29,7 @@ class MainWindow {
 
    public:
     MainWindow(int width = 640, int height = 480, bool verbose = true, bool debug = true);
+	~MainWindow();
     /**
      * Opens a window
      */

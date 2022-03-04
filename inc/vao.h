@@ -14,7 +14,6 @@ class VAO {
     void linkVBO(VBO& vbo, unsigned int layout);
     void bind();
     void unbind();
-    void free();
 };
 
 #endif  //_vertex_array_h_ header

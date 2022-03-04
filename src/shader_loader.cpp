@@ -23,14 +23,14 @@ ShaderLoader::ShaderLoader(const std::string& shaderFile, bool verbose) {
             compileShader(shaderSource.fragmentSource, GL_FRAGMENT_SHADER);
 
         // Create Shader Program Object and get its reference
-        programID_ = glCreateProgram();
+        programID = glCreateProgram();
         // Attach the Vertex and Fragment Shaders to the Shader Program
-        glAttachShader(programID_, vertexShader);
-        glAttachShader(programID_, fragmentShader);
+        glAttachShader(programID, vertexShader);
+        glAttachShader(programID, fragmentShader);
         /* Wrap-up/Link all the shaders together into the Shader Program */
-        glLinkProgram(programID_);
+        glLinkProgram(programID);
         /* Validate the program */
-        glValidateProgram(programID_);
+        glValidateProgram(programID);
 
         // Delete the now useless Vertex and Fragment Shader objects
         glDeleteShader(vertexShader);
@@ -42,9 +42,8 @@ ShaderLoader::ShaderLoader(const std::string& shaderFile, bool verbose) {
     }
 }
 
-ShaderLoader::~ShaderLoader() { free(); }
-void ShaderLoader::activate() { glUseProgram(programID_); }
-void ShaderLoader::free() { glDeleteProgram(programID_); }
+ShaderLoader::~ShaderLoader() {  glDeleteProgram(programID); }
+void ShaderLoader::activate() { glUseProgram(programID); }
 
 uint ShaderLoader::compileShader(const std::string& source, uint type) {
     /* Create a shader of the type specified */

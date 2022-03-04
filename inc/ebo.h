@@ -16,7 +16,6 @@ class EBO {
     ~EBO();
     void bind();
     void unbind();
-    void free();
 };
 
 

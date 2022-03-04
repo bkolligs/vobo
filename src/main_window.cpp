@@ -7,8 +7,16 @@ void GLAPIENTRY errorCallback(GLenum source, GLenum type, GLuint id,
 }
 
 MainWindow::MainWindow(int width, int height, bool verbose, bool debug)
-    : window_width_{width}, window_height_{height}, verbose_{verbose}, debug_{debug} {
+    : window_width_{width},
+      window_height_{height},
+      verbose_{verbose},
+      debug_{debug} {
     int result = initialize();
+}
+MainWindow::~MainWindow() {
+    /* Destroy the window object */
+    glfwDestroyWindow(window_);
+    glfwTerminate();
 }
 
 int MainWindow::initialize() {
@@ -33,6 +41,8 @@ int MainWindow::initialize() {
 
     /* Make the window_'s context current */
     glfwMakeContextCurrent(window_);
+    /* Set the swap interval to be in line with our monitor refresh rate */
+    glfwSwapInterval(1);
 
     /* Actually load the OpenGL specified functions with GLEW */
     if (glewInit() != GLEW_OK) {
@@ -41,8 +51,8 @@ int MainWindow::initialize() {
     }
 
     /* Enable the error callback */
-    
-    if (debug_){
+
+    if (debug_) {
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
         glDebugMessageCallback(errorCallback, 0);
     }
@@ -53,6 +63,7 @@ int MainWindow::initialize() {
 
     return 0;
 }
+
 int MainWindow::open() {
     /* generate a buffer to store the vertices of the triangle */
     float vertices[] = {
@@ -91,6 +102,15 @@ int MainWindow::open() {
     vbo1.unbind();
     ebo1.unbind();
 
+    int location = glGetUniformLocation(shaders.programID, "u_Color");
+    if (location == -1) {
+        std::cout << ERROR_INFO("Could not find Uniform!") << std::endl;
+    }
+
+    /* Make a nice animation for the triangles */
+    float r = 0.0;
+    float increment = 0.01f;
+
     /* Loop until the user closes the window_ */
     while (!glfwWindowShouldClose(window_)) {
         /* Specify the color of the background */
@@ -98,8 +118,15 @@ int MainWindow::open() {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // glUseProgram(shaderProgram);
         shaders.activate();
+        glUniform4f(location, r, 0.4f, 0.1f, 0.5f);
+
+        if (r > 1.0f)
+            increment = -0.01f;
+        else if (r < 0.0f)
+            increment = 0.01f;
+
+        r += increment;
         /* bind the vertex array object so we use it, otherwise we get a
          * SegFault*/
         vao1.bind();
@@ -113,70 +140,6 @@ int MainWindow::open() {
         glfwPollEvents();
     }
 
-    shaders.free();
-    vao1.free();
-    vbo1.free();
-    ebo1.free();
 
-    /* Destroy the window object */
-    glfwDestroyWindow(window_);
-    glfwTerminate();
-    return 0;
-}
-
-/**
- * compile a shader
- */
-static uint compileShader(const std::string& source, uint type) {
-    uint id = glCreateShader(type);
-    const char* src = source.c_str();
-    /* specify the source of shader */
-    glShaderSource(id, 1, &src, nullptr);
-    glCompileShader(id);
-
-    int result;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-    if (result == GL_FALSE) {
-        int length;
-        // retrieve the information from opengl
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-        /* weird casting from the Cherno */
-
-        char* message = (char*)alloca(length * sizeof(char));
-        glGetShaderInfoLog(id, length, &length, message);
-        std::cout << "Failed to compile "
-                  << (type == GL_VERTEX_SHADER ? "vertex" : "fragment")
-                  << " shader" << std::endl;
-        std::cout << message << std::endl;
-
-        glDeleteShader(id);
-        return 0;
-    }
-
-    return id;
-}
-/**
- * Read in the source code of a shader
- */
-static int createShader(const std::string& vertexShader,
-                        const std::string& fragmentShader) {
-    /* produce a program ID */
-    uint program = glCreateProgram();
-    uint vs = compileShader(vertexShader, GL_VERTEX_SHADER);
-    uint fs = compileShader(fragmentShader, GL_FRAGMENT_SHADER);
-
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-    /* Link the shader source code and validate it */
-    glLinkProgram(program);
-    glValidateProgram(program);
-
-    /* delete the shaders */
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-
-    /* Should detach the shaders here */
-    // glDetachShader(program, vs);
-    // glDetachShader(program, fs);
     return 0;
 }

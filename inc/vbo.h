@@ -13,7 +13,6 @@ class VBO {
     ~VBO();
     void bind();
     void unbind();
-    void free();
 };
 
 #endif  //_vertex_buffer_h_ header
