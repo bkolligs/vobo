@@ -67,12 +67,12 @@ int MainWindow::initialize() {
 int MainWindow::open() {
     /* generate a buffer to store the vertices of the triangle */
     float vertices[] = {
-        -0.5f,     -0.5f * float(sqrt(3)) / 3,    0.0f,  // Lower left corner
-        0.5f,      -0.5f * float(sqrt(3)) / 3,    0.0f,  // Lower right corner
-        0.0f,      0.5f * float(sqrt(3)) * 2 / 3, 0.0f,  // Upper corner
-        -0.5f / 2, 0.5f * float(sqrt(3)) / 6,     0.0f,  // Inner left
-        0.5f / 2,  0.5f * float(sqrt(3)) / 6,     0.0f,  // Inner right
-        0.0f,      -0.5f * float(sqrt(3)) / 3,    0.0f   // Inner down
+        -0.5f,     -0.5f * float(sqrt(3)) / 3,    0.0f,  0.8f, 0.3f, 0.02f, // Lower left corner
+        0.5f,      -0.5f * float(sqrt(3)) / 3,    0.0f,  0.8f, 0.3f, 0.02f, // Lower right corner
+        0.0f,      0.5f * float(sqrt(3)) * 2 / 3, 0.0f,  0.8f, 0.3f, 0.12f, // Upper corner
+        -0.5f / 2, 0.5f * float(sqrt(3)) / 6,     0.0f,  0.8f, 0.3f, 0.02f, // Inner left
+        0.5f / 2,  0.5f * float(sqrt(3)) / 6,     0.0f,  0.2f, 0.8f, 0.02f, // Inner right
+        0.0f,      -0.5f * float(sqrt(3)) / 3,    0.0f,  0.1f, 0.1f, 0.92f, // Inner down
     };
 
     uint indices[] = {
@@ -85,14 +85,20 @@ int MainWindow::open() {
     VertexArray vao1;
     vao1.bind();
 
+
     VertexBuffer vbo1(vertices, sizeof(vertices));
     vbo1.bind();
 
-    /* Generates an element array buffer object and links to indices */
-    ElementBuffer ebo1(indices, sizeof(indices));
+    /* Generates an element array buffer object and links to the indices we are using*/
+    ElementBuffer ebo1(indices, 9);
 
+    /* Produce the layout of the vertex array object so we know how to decode our list of floats! */
+    VertexBufferLayout layout;
+    /* We "push" a new type of data onto the layout, so it can calculate stride and offset automatically */ 
+    layout.push<float>(3, "positions");
+    layout.push<float>(3, "color");
     /* link the vertex array and buffer objects */
-    vao1.linkVBO(vbo1, 0);
+    vao1.linkVBO(vbo1, layout);
 
     /* Produce the shaders */
     Shader shaders("../src/assets/shaders/shaders.shader");
@@ -116,7 +122,7 @@ int MainWindow::open() {
         /* Render something to the screen! */
         renderer.draw(vao1, ebo1, shaders);
         /* Should use a material here instead of this, add this later */
-        shaders.setUniform4F("u_Color", r, 0.4f, 0.1f, 0.5f);
+        shaders.setUniform4F("uColor", r, 0.4f, 0.1f, 0.5f);
         if (r > 1.0f)
             increment = -0.01f;
         else if (r < 0.0f)

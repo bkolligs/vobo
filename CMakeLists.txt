@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(OCULOBO CXX)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
 
 set(USE_SANITIZER FALSE)
@@ -20,8 +20,9 @@ include_directories(inc)
 add_library(oculobo 
 	src/main_window
 	src/shader
-	src/vertex_array
 	src/vertex_buffer
+	src/vertex_buffer_layout
+	src/vertex_array
 	src/element_buffer
 	src/error_display
 	src/renderer

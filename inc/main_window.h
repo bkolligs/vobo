@@ -12,11 +12,11 @@
 // custom abstractions
 #include "element_buffer.h"
 #include "error_display.h"
+#include "renderer.h"
 #include "shader.h"
 #include "utils.h"
 #include "vertex_array.h"
 #include "vertex_buffer.h"
-#include "renderer.h"
 
 class MainWindow {
    private:
