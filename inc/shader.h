@@ -3,6 +3,8 @@
 
 #include "utils.h"
 #include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <array>
 #include <unordered_map>
 #include <fstream>
@@ -38,7 +40,9 @@ class Shader {
     uint getProgramID(){return programID_;}
     int getUniformLocation(const std::string&name);
     /* Set a uniform of type 4 float, default color is white */
-    void setUniform4F(const std::string& name, float v0=0.0f, float v1 = 0.0f, float v2=0.0f, float v3=0.0f);
+    void setUniform4F(const std::string& name, float v0, float v1, float v2, float v3);
+    void setUniform1F(const std::string& name, float v0);
+    void setUniformMat4F(const std::string& name, glm::mat4 & matrix);
 };
 
 #endif  //_shader_h_ header

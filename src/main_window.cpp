@@ -30,6 +30,8 @@ int MainWindow::initialize() {
 
     /* Enable the Debug context for GLFW */
     if (debug_) glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+    /* Set up anti-aliasing */
+    glfwWindowHint(GLFW_SAMPLES, 4);
     /* Create a windowed mode window and its OpenGL context */
     window_ = glfwCreateWindow(window_width_, window_height_,
                                main_window_name_.c_str(), NULL, NULL);
@@ -67,22 +69,24 @@ int MainWindow::initialize() {
 int MainWindow::open() {
     /* generate a buffer to store the vertices of the triangle */
     float vertices[] = {
-        -0.5f,     -0.5f * float(sqrt(3)) / 3,    0.0f,  0.8f, 0.3f, 0.02f, // Lower left corner
-        0.5f,      -0.5f * float(sqrt(3)) / 3,    0.0f,  0.8f, 0.3f, 0.02f, // Lower right corner
-        0.0f,      0.5f * float(sqrt(3)) * 2 / 3, 0.0f,  0.8f, 0.3f, 0.12f, // Upper corner
-        -0.5f / 2, 0.5f * float(sqrt(3)) / 6,     0.0f,  0.8f, 0.3f, 0.02f, // Inner left
-        0.5f / 2,  0.5f * float(sqrt(3)) / 6,     0.0f,  0.2f, 0.8f, 0.02f, // Inner right
-        0.0f,      -0.5f * float(sqrt(3)) / 3,    0.0f,  0.1f, 0.1f, 0.92f, // Inner down
+        -0.5f, 0.0f,  0.5f,  0.1f, 0.0f, 0.02f, 
+        -0.5f, 0.0f, -0.5f,  0.8f, 0.3f, 0.02f, 
+         0.5f, 0.0f, -0.5f,  0.2f, 0.8f, 0.12f, 
+         0.5f, 0.0f,  0.5f,  0.8f, 0.3f, 0.02f, 
+         0.0f, 0.8f,  0.0f,  0.1f, 0.1f, 0.92f, 
     };
 
     uint indices[] = {
-        0, 3, 5,  // lower left triangle
-        3, 2, 4,  // lower right triangle
-        5, 4, 1   // upper triangle
+        0, 1, 2,  
+        0, 2, 3,  
+        0, 1, 4,
+        1, 2, 4,
+        2, 3, 4,
+        3, 0, 4
     };
 
     /* generate a vertex array and bind it */
-    VertexArray vao1;
+    VertexArray vao1(debug_);
     vao1.bind();
 
 
@@ -90,7 +94,7 @@ int MainWindow::open() {
     vbo1.bind();
 
     /* Generates an element array buffer object and links to the indices we are using*/
-    ElementBuffer ebo1(indices, 9);
+    ElementBuffer ebo1(indices, 18);
 
     /* Produce the layout of the vertex array object so we know how to decode our list of floats! */
     VertexBufferLayout layout;
@@ -101,7 +105,7 @@ int MainWindow::open() {
     vao1.linkVBO(vbo1, layout);
 
     /* Produce the shaders */
-    Shader shaders("../src/assets/shaders/shaders.shader");
+    Shader shaders("../src/assets/shaders/shaders.shader", verbose_);
 
     /* Unbind to prevent accidental modifications */
     vao1.unbind();
@@ -117,13 +121,29 @@ int MainWindow::open() {
 
     /* Loop until the user closes the window_ */
     while (!glfwWindowShouldClose(window_)) {
-        renderer.clear();
+        renderer.clear({159.0f/255.0f, 195.0f/255.0f, 252.0f/255.0f, 0.1});
 
         /* Render something to the screen! */
         renderer.draw(vao1, ebo1, shaders);
         /* Should use a material here instead of this, add this later */
-        shaders.setUniform4F("uColor", r, 0.4f, 0.1f, 0.5f);
-        if (r > 1.0f)
+        // shaders.setUniform4F("uColor", r, 0.4f, 0.1f, 0.5f);
+        // model pose matrix
+        glm::mat4 model = glm::mat4(1.0f);
+        // camera extrinsics matrix
+        glm::mat4 view = glm::mat4(1.0f);
+        // projection intrinsics matrix
+        glm::mat4 proj = glm::mat4(1.0f);
+        model = glm::rotate(model, r, glm::vec3(0.0f, 1.0f, 0.0f));
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        view = glm::rotate(view, glm::radians(30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        proj = glm::perspective(glm::radians(60.0f), (float) window_width_/window_height_, 0.1f, 100.0f);
+
+
+		shaders.setUniformMat4F("uModel", model);
+		shaders.setUniformMat4F("uView", view);
+		shaders.setUniformMat4F("uProj", proj);
+        // shaders.setUniform1F("uScale", -0.5);
+        if (r > 360.0f)
             increment = -0.01f;
         else if (r < 0.0f)
             increment = 0.01f;

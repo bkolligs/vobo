@@ -12,7 +12,7 @@ class VertexArray {
    	bool verbose_;
    public:
     unsigned int renderID_;
-    VertexArray(bool verbose=true);
+    VertexArray(bool verbose=false);
     ~VertexArray();
     void linkVBO(VertexBuffer& vbo, VertexBufferLayout& layout);
     void bind() const;

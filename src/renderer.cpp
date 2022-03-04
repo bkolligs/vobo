@@ -2,6 +2,8 @@
 
 Renderer::Renderer(/* args */)
 {
+	/* Enable depth testing so that OpenGL renders far away vertices behind closer ones */
+	glEnable(GL_DEPTH_TEST);
 }
 
 Renderer::~Renderer()
@@ -11,8 +13,8 @@ Renderer::~Renderer()
 void Renderer::clear(const std::array<float, 4> backgroundColor) {
 	/* Specify the color of the background */
 	glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[4]);
-	/* Render here */
-	glClear(GL_COLOR_BUFFER_BIT);
+	/* Render here clear the depth buffer bit and the color bit*/
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Renderer::draw(const VertexArray& va, const ElementBuffer& eb, const Shader& shader) const {

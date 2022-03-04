@@ -9,6 +9,8 @@
 #include <GLFW/glfw3.h>
 // GLM contains math functions we will use
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 // custom abstractions
 #include "element_buffer.h"
 #include "error_display.h"

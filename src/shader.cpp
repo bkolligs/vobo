@@ -115,12 +115,6 @@ ShaderSource Shader::getFileContents(const std::string& fileName) {
     }
 }
 
-void Shader::setUniform4F(const std::string& name, float v0, float v1, float v2, float v3) {
-    /* Set the uniform at the location we gather */
-    int location = getUniformLocation(name);
-    glUniform4f(location, v0, v1, v2, v3);
-}
-
 int Shader::getUniformLocation(const std::string&name) {
     /* Check if we have cached the uniform and if so access the hash map */
     if (uniformCache_.find(name) != uniformCache_.end()) {
@@ -136,4 +130,21 @@ int Shader::getUniformLocation(const std::string&name) {
 	/* Cache the uniform */
     uniformCache_[name] = location;
     return location;
+}
+
+void Shader::setUniform4F(const std::string& name, float v0, float v1, float v2, float v3) {
+    /* Set the uniform at the location we gather */
+    int location = getUniformLocation(name);
+    glUniform4f(location, v0, v1, v2, v3);
+}
+
+void Shader::setUniform1F(const std::string& name, float v0) {
+    int location = getUniformLocation(name);
+    glUniform1f(location, v0);
+}
+
+void Shader::setUniformMat4F(const std::string& name, glm::mat4& matrix) {
+    int location = getUniformLocation(name);
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+
 }
