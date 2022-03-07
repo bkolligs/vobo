@@ -1,9 +1,9 @@
 #ifndef _error_h_
 #define _error_h_
 
-#include "utils.h"
-#include <GL/glew.h>
 #include <iostream>
+#include "log.h"
+#include <GL/glew.h>
 
 void handleErrorDisplay(GLenum source, GLenum type, GLuint id, GLenum severity,
                         GLsizei length, const GLchar* message,

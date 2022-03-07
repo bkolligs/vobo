@@ -65,7 +65,7 @@ uint Shader::compileShader(const std::string& source, uint type) {
         glGetShaderInfoLog(id, length, &length, message);
 
         std::stringstream errorMessage;
-        errorMessage << ERROR_INFO(
+        errorMessage << VOBO_ERROR_STRING(
                             "[Shader] Failed to compile shader of type: ")
                      << (type == GL_VERTEX_SHADER ? "vertex" : "fragment")
                      << std::endl
@@ -101,15 +101,13 @@ ShaderSource Shader::getFileContents(const std::string& fileName) {
             }
         }
 
-        verbose_ and std::cout
-            << SUCCESS_INFO("[Shader] Loaded shaders from: ") << fileName
-            << std::endl;
+        verbose_ and VOBO_DEBUG_LOG("[Shader] Loaded shaders from: " << fileName);
         return {contents.at(0).str(), contents.at(1).str()};
     }
 
     else {
         char message[40 + fileName.size()];
-        sprintf(message, ERROR_INFO("[Shader] Unable to open file: '%s'"),
+        sprintf(message, VOBO_ERROR_STRING("[Shader] Unable to open file: '%s'"),
                 fileName.c_str());
         throw std::invalid_argument(message);
     }
@@ -123,7 +121,7 @@ int Shader::getUniformLocation(const std::string&name) {
     /* Get the uniform location in the current shader program */
     int location = glGetUniformLocation(programID_, name.c_str());
     if (location == -1) {
-        std::cout << ERROR_INFO("Could not find uniform: ") << name << std::endl;
+        VOBO_ERROR_LOG("Could not find uniform: " << name);
     }
 
     verbose_ and std::cout << "[Shader] Caching uniform: " << name << std::endl;

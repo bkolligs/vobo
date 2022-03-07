@@ -2,10 +2,8 @@
 #define _vertex_buffer_element_h_
 
 #include <GL/glew.h>
-#include <iostream>
-#include <vector>
-#include <string>
-#include "utils.h"
+#include "vobo_pch.h"
+#include "log.h"
 
 /**
  * Specifies the attributes of a particular block of data inside a vertex buffer

@@ -1,6 +1,6 @@
 #include <GL/glew.h>
-#include "utils.h"
-#include <array>
+#include "log.h"
+#include "vobo_pch.h"
 #include "vertex_array.h"
 #include "element_buffer.h"
 #include "shader.h"

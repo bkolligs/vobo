@@ -90,8 +90,8 @@ void handleErrorDisplay(GLenum source, GLenum type, GLuint id, GLenum severity,
             _severity = "UNKNOWN";
             break;
     }
-    std::cout << WARNING_INFO("DEBUG") << "\n\tSource: " << _source
-              << "\n\tType:" << _type << "\n\tID: " << id
-              << "\n\tSeverity: " << _severity 
-              << "\n\tMessage: \n\t" << message << std::endl;
+    VOBO_WARNING_LOG("\n\tSource: " << _source << "\n\tType:" << _type
+                                    << "\n\tID: " << id
+                                    << "\n\tSeverity: " << _severity
+                                    << "\n\tMessage: \n\t" << message);
 }

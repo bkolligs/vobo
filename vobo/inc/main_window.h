@@ -16,9 +16,12 @@
 #include "error_display.h"
 #include "renderer.h"
 #include "shader.h"
-#include "utils.h"
+#include "log.h"
 #include "vertex_array.h"
 #include "vertex_buffer.h"
+
+namespace vobo
+{
 
 class MainWindow {
    private:
@@ -44,7 +47,5 @@ class MainWindow {
     int initialize(void);
 };
 
-static uint compileShader(const std::string& source, uint type);
-static int createShader(const std::string& vertexShader,
-                        const std::string& fragmentShader);
+} // namespace vobo
 #endif  //_main_window_h_ header

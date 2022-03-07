@@ -1,17 +1,11 @@
 #ifndef _shader_h_
 #define _shader_h_
 
-#include "utils.h"
+#include "log.h"
+#include "vobo_pch.h"
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <array>
-#include <unordered_map>
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
 
 struct ShaderSource {
     std::string vertexSource;

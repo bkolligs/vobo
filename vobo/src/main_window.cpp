@@ -1,5 +1,8 @@
 #include "main_window.h"
 
+namespace vobo
+{
+    
 void GLAPIENTRY errorCallback(GLenum source, GLenum type, GLuint id,
                               GLenum severity, GLsizei length,
                               const GLchar* message, const void* userParam) {
@@ -22,11 +25,11 @@ MainWindow::~MainWindow() {
 int MainWindow::initialize() {
     // Initialize GLFW so we can use the following functions
     if (!glfwInit()) {
-        std::cerr << ERROR_INFO("Failed to initialize GLFW") << std::endl;
+        VOBO_ERROR_LOG("Failed to initialize GLFW");
         return -1;
     }
 
-    verbose_ and std::cout << SUCCESS_INFO("Initialized GLFW") << std::endl;
+    verbose_ and VOBO_DEBUG_LOG("Initialized GLFW");
 
     /* Enable the Debug context for GLFW */
     if (debug_) glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
@@ -36,7 +39,7 @@ int MainWindow::initialize() {
     window_ = glfwCreateWindow(window_width_, window_height_,
                                main_window_name_.c_str(), NULL, NULL);
     if (!window_) {
-        std::cerr << ERROR_INFO("Failed to create GLFW window") << std::endl;
+        VOBO_ERROR_LOG("Failed to create GLFW window");
         glfwTerminate();
         return -1;
     }
@@ -48,7 +51,7 @@ int MainWindow::initialize() {
 
     /* Actually load the OpenGL specified functions with GLEW */
     if (glewInit() != GLEW_OK) {
-        std::cerr << ERROR_INFO("Could not load GLEW!") << std::endl;
+        VOBO_ERROR_LOG("Could not load GLEW!");
         return -1;
     }
 
@@ -59,9 +62,9 @@ int MainWindow::initialize() {
         glDebugMessageCallback(errorCallback, 0);
     }
 
-    verbose_ and std::cout << SUCCESS_INFO("Initialized OpenGL") << std::endl
+    verbose_ and VOBO_DEBUG_LOG("Initialized OpenGL"
                            << "Using OpenGL version: "
-                           << glGetString(GL_VERSION) << std::endl;
+                           << glGetString(GL_VERSION));
 
     return 0;
 }
@@ -105,7 +108,7 @@ int MainWindow::open() {
     vao1.linkVBO(vbo1, layout);
 
     /* Produce the shaders */
-    Shader shaders("../src/assets/shaders/shaders.shader", verbose_);
+    Shader shaders("../src/assets/shaders/shaders.glsl", verbose_);
 
     /* Unbind to prevent accidental modifications */
     vao1.unbind();
@@ -159,3 +162,4 @@ int MainWindow::open() {
 
     return 0;
 }
+} // namespace vobo
