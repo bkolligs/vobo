@@ -15,7 +15,13 @@ find_package(glfw3 3.3 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 
-include_directories(inc)
+set(VOBO_INCLUDE_DIRS
+	deps/stb
+	inc
+)
+# handle dependencies
+add_subdirectory(deps/stb)
+
 
 add_library(vobo 
 	src/main_window.cpp
@@ -23,16 +29,23 @@ add_library(vobo
 	src/vertex_buffer.cpp
 	src/vertex_buffer_layout.cpp
 	src/vertex_array.cpp
-	src/element_buffer.cpp
+	src/index_buffer.cpp
 	src/error_display.cpp
 	src/renderer.cpp
 )
 
+
 # precompile all the standard library stuff that we use
 target_precompile_headers(vobo PUBLIC inc/vobo_pch.h)
 
-target_link_libraries(vobo
+target_link_libraries(vobo 
 	OpenGL::GL
 	glfw
 	GLEW
+	sf_libs
+)
+
+# Has to be public since this is a library being pulled into other targets
+target_include_directories(vobo PUBLIC
+	${VOBO_INCLUDE_DIRS}
 )

@@ -29,6 +29,23 @@ Shader::Shader(const std::string& shaderFile, bool verbose) : verbose_{verbose} 
         glAttachShader(programID_, fragmentShader);
         /* Wrap-up/Link all the shaders together into the Shader Program */
         glLinkProgram(programID_);
+        GLint result = 0;
+        glGetProgramiv(programID_, GL_LINK_STATUS, (int*)&result);
+        if (result == GL_FALSE) {
+            GLint maxLength = 0;
+            glGetProgramiv(programID_, GL_INFO_LOG_LENGTH, &maxLength);
+            /* the maxlength includes the NULL char */
+            std::vector<GLchar> infoLog(maxLength);
+            glGetProgramInfoLog(programID_, maxLength, &maxLength, &infoLog[0]);
+
+			/* Don't need the program anymore */
+            glDeleteProgram(programID_);
+
+            /* Don't leak the failed artifacts */
+            glDeleteShader(vertexShader);
+            glDeleteShader(fragmentShader);
+
+        }
         /* Validate the program */
         glValidateProgram(programID_);
 
@@ -145,4 +162,9 @@ void Shader::setUniformMat4F(const std::string& name, glm::mat4& matrix) {
     int location = getUniformLocation(name);
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 
+}
+
+void Shader::setUniformInt(const std::string& name, int v0) {
+    int location = getUniformLocation(name);
+    glUniform1i(location, v0);
 }

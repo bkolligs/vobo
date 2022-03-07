@@ -1,23 +1,23 @@
-#ifndef _element_buffer_h_
-#define _element_buffer_h_
+#ifndef _index_buffer_h_
+#define _index_buffer_h_
 
 #include "GL/glew.h"
 
 /**
  * Element buffer object for using indices
  */
-class ElementBuffer {
+class IndexBuffer {
    public:
     unsigned int renderID_;
     int count_;
     /**
      * Generates an element buffer arrray and links it to indices
      */
-    ElementBuffer(unsigned int* indices, int count);
-    ~ElementBuffer();
+    IndexBuffer(unsigned int* indices, int count);
+    ~IndexBuffer();
     void bind() const;
     void unbind() const;
     int getCount() const { return count_; }
 };
 
-#endif  //_element_buffer_h_ header
+#endif  //_index_buffer_h_ header

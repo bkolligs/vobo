@@ -1,13 +1,10 @@
 #include "sandbox.h"
-
-template<typename ...Args>
-void logDebug(Args && ...args) {
-	(std::cout << ... << args);
-}
+#include <filesystem>
 
 int main(int argc, char const *argv[])
 {
-	vobo::MainWindow window(1200, 900, true, false);
+	std::filesystem::path voboPath = "/";
+	vobo::MainWindow window(1200, 900, true, true);
 	int result = window.open();
 
 	return 0;

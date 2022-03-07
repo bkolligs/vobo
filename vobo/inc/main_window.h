@@ -1,7 +1,6 @@
 #ifndef _main_window_h_
 #define _main_window_h_
 
-#include <iostream>
 
 // include GLEW which allows us to access the modern GL
 #include <GL/glew.h>
@@ -11,8 +10,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+// precompiled headers and common types
+#include "common.h"
+#include "stb_image.h"
 // custom abstractions
-#include "element_buffer.h"
+#include "index_buffer.h"
 #include "error_display.h"
 #include "renderer.h"
 #include "shader.h"
@@ -32,6 +34,8 @@ class MainWindow {
     bool verbose_;
     bool debug_;
     std::string main_window_name_ = "Oculobo 2022v0.1";
+
+    std::string currentVoboPath_ = "";
 
    public:
     MainWindow(int width = 640, int height = 480, bool verbose = true,

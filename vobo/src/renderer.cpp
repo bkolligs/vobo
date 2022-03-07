@@ -17,7 +17,7 @@ void Renderer::clear(const std::array<float, 4> backgroundColor) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::draw(const VertexArray& va, const ElementBuffer& eb, const Shader& shader) const {
+void Renderer::draw(const VertexArray& va, const IndexBuffer& eb, const Shader& shader) const {
 	/* Bind the buffer objects to send to the GPU before drawing */
 	va.bind();
 	eb.bind();

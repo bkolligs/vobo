@@ -37,6 +37,7 @@ class Shader {
     void setUniform4F(const std::string& name, float v0, float v1, float v2, float v3);
     void setUniform1F(const std::string& name, float v0);
     void setUniformMat4F(const std::string& name, glm::mat4 & matrix);
+    void setUniformInt(const std::string& name, int v0);
 };
 
 #endif  //_shader_h_ header
