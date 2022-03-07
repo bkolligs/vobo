@@ -16,6 +16,9 @@ private:
 public:
 	Renderer(/* args */);
 	~Renderer();
+	void beginScene();
+	void submit();
+	void endScene();
 	void clear(const std::array<float, 4> backgroundColor = {0.0f, 0.0f, 0.0f, 0.0f});
 	void draw(const VertexArray& va, const IndexBuffer& eb, const Shader& shader) const;
 };

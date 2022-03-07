@@ -151,57 +151,51 @@ int MainWindow::open() {
 
     /* Make a nice animation for the triangles */
     float r = 0.0;
-    float increment = 0.01f;
+    float increment = 0.1f;
 
     /* Create a renderer class */
     Renderer renderer;
+    // OrthographicCamera camera(-1, 1, -1, 1);
+    PerspectiveCamera camera(60, window_width_, window_height_);
+    camera.setPosition({0.0f, 0.5f, 2.0f});
+    camera.setRotation(-10.0f, {1.0f, 0.0f, 0.0f});
 
     /* Loop until the user closes the window_ */
     while (!glfwWindowShouldClose(window_)) {
         renderer.clear({159.0f/255.0f, 195.0f/255.0f, 252.0f/255.0f, 0.1});
+        renderer.beginScene();
 
-        /* Render something to the screen! */
-        // renderer.draw(pyramid, pyramidIndices, shaders);
-        /* Should use a material here instead of this, add this later */
-        // shaders.setUniform4F("uColor", r, 0.4f, 0.1f, 0.5f);
-        renderer.draw(squareArray, squareIB, shadersFlat);
+        /* Set the uniform to the texture slot */
+        // renderer.draw(squareArray, squareIB, shadersFlat);
+        // shadersFlat.setUniformInt("uTexture", 0);
         // model pose matrix
         glm::mat4 model = glm::mat4(1.0f);
         // camera extrinsics matrix
         glm::mat4 view = glm::mat4(1.0f);
         // projection intrinsics matrix
         glm::mat4 proj = glm::mat4(1.0f);
-        // model = glm::rotate(model, 0.0, glm::vec3(0.0f, 0.0f, -1.0f));
-        // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-        // view = glm::rotate(view, glm::radians(30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-        // proj = glm::perspective(glm::radians(60.0f), (float) window_width_/window_height_, 0.1f, 100.0f);
-
-
-		// shaders.setUniformMat4F("uModel", model);
+        renderer.draw(pyramid, pyramidIndices, shaders);
+        model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 2.0f));
+        model = glm::rotate(glm::mat4(1.0f), r, glm::vec3(0.0f, 1.0f, 0.0f));
+		shaders.setUniformMat4F("uModel", model);
 		// shaders.setUniformMat4F("uView", view);
 		// shaders.setUniformMat4F("uProj", proj);
-		shadersFlat.setUniformMat4F("uModel", model);
-		shadersFlat.setUniformMat4F("uView", view);
-		shadersFlat.setUniformMat4F("uProj", proj);
-        // // shaders.setUniform1F("uScale", -0.5);
-        // if (r > 360.0f)
-        //     increment = -0.01f;
-        // else if (r < 0.0f)
-        //     increment = 0.01f;
+        shaders.setUniformMat4F("uViewProjection", camera.getViewProjection());
+        if (r > 90.0f)
+            increment = -0.01f;
+        else if (r < 0.0f)
+            increment = 0.01f;
 
-        // r += increment;
+        r += increment;
 
-        /* Set the uniform to the texture slot */
-        shadersFlat.setUniformInt("uTexture", 0);
 
+        renderer.endScene();
         /* Swap front and back buffers */
         glfwSwapBuffers(window_);
 
         /* Poll for and process events */
         glfwPollEvents();
     }
-
-    // glDeleteTextures(1, &textureID);
 
     return 0;
 }

@@ -33,6 +33,8 @@ add_library(vobo
 	src/error_display.cpp
 	src/renderer.cpp
 	src/texture.cpp
+	src/orthographic_camera.cpp
+	src/perspective_camera.cpp
 )
 
 

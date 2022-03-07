@@ -7,9 +7,6 @@ layout(location=0) out vec4 oColor;
 // take in this variable data from the vertex shader
 in vec4 vColor;
 
-// uniform to specify color coming from the CPU
-uniform vec4 uColor;
-
 void main()
 {
  // set the color to the vertex color
@@ -33,13 +30,12 @@ uniform float uScale;
 
 // MVP matrices
 uniform mat4 uModel;
-uniform mat4 uView;
-uniform mat4 uProj;
+uniform mat4 uViewProjection;
 
 void main()
 {
   // outputs the positions of all vertices
-  gl_Position = uProj * uView * uModel * iPos;
+  gl_Position = uViewProjection * uModel * iPos;
   // assigns the colors from vertex data to our output data going to fragment shader
   vColor = iColor;
 };

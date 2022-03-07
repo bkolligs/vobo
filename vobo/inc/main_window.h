@@ -22,6 +22,8 @@
 #include "vertex_array.h"
 #include "vertex_buffer.h"
 #include "texture.h"
+#include "orthographic_camera.h"
+#include "perspective_camera.h"
 
 namespace vobo
 {
