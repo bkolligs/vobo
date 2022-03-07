@@ -139,28 +139,9 @@ int MainWindow::open() {
     Shader shaders(VOBO_SRC_DIR + "assets/shaders/pyramid.glsl", verbose_);
     Shader shadersFlat(VOBO_SRC_DIR + "assets/shaders/square.glsl", verbose_);
 
-    /* Handle the texture here */
-    int width, height, channels;
-    std::string texturePath = VOBO_SRC_DIR + "assets/textures/checkerboard.png";
-    stbi_uc * data = stbi_load(texturePath.c_str(), &width, &height, &channels, 3);
-    if (data) {
-        VOBO_DEBUG_LOG("Loaded image from" << texturePath << "\n\tChannels: " << channels);
-    }
-    unsigned int textureID;
-    /* Get an ID */
-    glCreateTextures(GL_TEXTURE_2D, 1, &textureID);
-    /* Allocate space on the GPU */
-    glTextureStorage2D(textureID, 1, GL_SRGB8, width, height);
-    /* Set texture parameters */
-    glTextureParameteri(textureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTextureParameteri(textureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    /* Upload our texture */
-    glTextureSubImage2D(textureID, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
-    // glTexSubImage2D(textureID, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
-    /* Don't need the texture in CPU memory anymore */
-    stbi_image_free(data);
-    /* Bind the texture to slot 0 in this case */
-    glBindTextureUnit(0, textureID);
+    // /* Handle the texture here */
+    Texture checkerboard(VOBO_SRC_DIR + "assets/textures/checkerboard.png");
+    checkerboard.bind(0);
 
 
     /* Unbind to prevent accidental modifications */
@@ -220,7 +201,7 @@ int MainWindow::open() {
         glfwPollEvents();
     }
 
-    glDeleteTextures(1, &textureID);
+    // glDeleteTextures(1, &textureID);
 
     return 0;
 }

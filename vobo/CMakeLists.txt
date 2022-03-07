@@ -32,6 +32,7 @@ add_library(vobo
 	src/index_buffer.cpp
 	src/error_display.cpp
 	src/renderer.cpp
+	src/texture.cpp
 )
 
 
