@@ -1,8 +1,7 @@
 #include "window.h"
 
-namespace vobo
-{
-    
+namespace vobo {
+
 void GLAPIENTRY errorCallback(GLenum source, GLenum type, GLuint id,
                               GLenum severity, GLsizei length,
                               const GLchar* message, const void* userParam) {
@@ -14,8 +13,6 @@ Window::Window(int width, int height, bool verbose, bool debug)
       windowHeight_{height},
       verbose_{verbose},
       debug_{debug} {
-
-
     int result = initialize();
 }
 Window::~Window() {
@@ -39,7 +36,7 @@ int Window::initialize() {
     glfwWindowHint(GLFW_SAMPLES, 4);
     /* Create a windowed mode window and its OpenGL context */
     window_ = glfwCreateWindow(windowWidth_, windowHeight_,
-                               main_window_name_.c_str(), NULL, NULL);
+                               mainWindowName_.c_str(), NULL, NULL);
     if (!window_) {
         VOBO_ERROR_LOG("Failed to create GLFW window");
         glfwTerminate();
@@ -59,8 +56,8 @@ int Window::initialize() {
     /* Set the viewport to default to size of window */
     glViewport(0, 0, windowWidth_, windowHeight_);
 
-    /* Set the GLFW window pointer */
-    glfwSetWindowUserPointer(window_, &windowData);
+    /* Initialize the window events and inputs callbacks */
+    int result = pWindowEvents->initialize(window_);
 
     /* Enable the error callback */
     if (debug_) {
@@ -69,87 +66,59 @@ int Window::initialize() {
     }
 
     verbose_ and VOBO_DEBUG_LOG("Loaded OpenGL! "
-                           << "Using OpenGL configuration: "
-                           << "\n\tVersion: " << glGetString(GL_VERSION)
-                           << "\n\tVendor: " << glGetString(GL_VENDOR)
-                           << "\n\tDevice: " << glGetString(GL_RENDERER));
+                                << "Using OpenGL configuration: "
+                                << "\n\tVersion: " << glGetString(GL_VERSION)
+                                << "\n\tVendor: " << glGetString(GL_VENDOR)
+                                << "\n\tDevice: " << glGetString(GL_RENDERER));
 
-    glfwSetKeyCallback(window_, [](GLFWwindow * window, int key, int scancode, int action, int mods){
-        VOBO_DEBUG_LOG("Window recieved the following key: " << key);
-    });
-    glfwSetMouseButtonCallback(window_, [](GLFWwindow * window, int button, int action, int mods){
-        double xPos, yPos;
-        if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
-            glfwGetCursorPos(window, &xPos, &yPos);
-            VOBO_DEBUG_LOG("Pressed the left mouse button! Pressed at: (" << xPos << "," << yPos << ")");
-
-        }
-    });
-    glfwSetScrollCallback(window_, [](GLFWwindow * window, double xOffset, double yOffset){
-        WindowInputs * data = (WindowInputs *) glfwGetWindowUserPointer(window);
-        data->setScrollY(yOffset);
-    });
     return 0;
 }
-
 
 int Window::open() {
     /* generate a buffer to store the pyramidVertices of the triangle */
     float pyramidVertices[] = {
-        -0.5f, 0.0f,  0.5f,  0.1f, 0.0f, 0.02f, 
-        -0.5f, 0.0f, -0.5f,  0.8f, 0.3f, 0.02f, 
-         0.5f, 0.0f, -0.5f,  0.2f, 0.8f, 0.12f, 
-         0.5f, 0.0f,  0.5f,  0.8f, 0.3f, 0.02f, 
-         0.0f, 0.8f,  0.0f,  0.1f, 0.1f, 0.92f, 
+        -0.5f, 0.0f,  0.5f, 0.1f,  0.0f,  0.02f, -0.5f, 0.0f,  -0.5f, 0.8f,
+        0.3f,  0.02f, 0.5f, 0.0f,  -0.5f, 0.2f,  0.8f,  0.12f, 0.5f,  0.0f,
+        0.5f,  0.8f,  0.3f, 0.02f, 0.0f,  0.8f,  0.0f,  0.1f,  0.1f,  0.92f,
     };
 
-    uint pyramidData[] = {
-        0, 1, 2,  
-        0, 2, 3,  
-        0, 1, 4,
-        1, 2, 4,
-        2, 3, 4,
-        3, 0, 4
-    };
+    uint pyramidData[] = {0, 1, 2, 0, 2, 3, 0, 1, 4, 1, 2, 4, 2, 3, 4, 3, 0, 4};
 
-	/* Vertex buffer to hold the square */
-    float squareVertices[] = {
-        -0.5, -0.5, 0.0, 0.0, 0.0,
-        -0.5, 0.5,  0.0, 0.0, 1.0,
-        0.5,  0.5,  0.0, 1.0, 1.0,
-        0.5,  -0.5, 0.0, 1.0, 0.0
-    };
-    uint squareIndices[] = {
-        0, 1, 2,
-        0, 2, 3
-    };
+    /* Vertex buffer to hold the square */
+    float squareVertices[] = {-0.5, -0.5, 0.0,  0.0, 0.0, -0.5, 0.5,
+                              0.0,  0.0,  1.0,  0.5, 0.5, 0.0,  1.0,
+                              1.0,  0.5,  -0.5, 0.0, 1.0, 0.0};
+    uint squareIndices[]   = {0, 1, 2, 0, 2, 3};
 
     VertexBuffer squareBuffer(squareVertices, sizeof(squareVertices));
     VertexBufferLayout squareLayout;
     squareLayout.push<float>(3, "positions");
     squareLayout.push<float>(2, "texture_coords");
     VertexArray squareArray(debug_);
-    IndexBuffer squareIB(squareIndices, sizeof(squareIndices)/sizeof(unsigned int));
+    IndexBuffer squareIB(squareIndices,
+                         sizeof(squareIndices) / sizeof(unsigned int));
     /* Associate the array with the buffers */
     squareArray.bind();
     squareBuffer.bind();
     squareArray.linkVBO(squareBuffer, squareLayout);
 
-
     /* generate a vertex array and bind it */
     VertexArray pyramid(debug_);
     pyramid.bind();
 
-
     VertexBuffer pyramidBuffer(pyramidVertices, sizeof(pyramidVertices));
     pyramidBuffer.bind();
 
-    /* Generates an element array buffer object and links to the indices we are using*/
-    IndexBuffer pyramidIndices(pyramidData, sizeof(pyramidData)/sizeof(unsigned int));
+    /* Generates an element array buffer object and links to the indices we are
+     * using*/
+    IndexBuffer pyramidIndices(pyramidData,
+                               sizeof(pyramidData) / sizeof(unsigned int));
 
-    /* Produce the pyramidLayout of the vertex array object so we know how to decode our list of floats! */
+    /* Produce the pyramidLayout of the vertex array object so we know how to
+     * decode our list of floats! */
     VertexBufferLayout pyramidLayout;
-    /* We "push" a new type of data onto the pyramidLayout, so it can calculate stride and offset automatically */ 
+    /* We "push" a new type of data onto the pyramidLayout, so it can calculate
+     * stride and offset automatically */
     pyramidLayout.push<float>(3, "positions");
     pyramidLayout.push<float>(3, "color");
     /* link the vertex array and buffer objects */
@@ -163,14 +132,13 @@ int Window::open() {
     Texture checkerboard(VOBO_SRC_DIR + "assets/textures/checkerboard.png");
     checkerboard.bind(0);
 
-
     /* Unbind to prevent accidental modifications */
     pyramid.unbind();
     pyramidBuffer.unbind();
     pyramidIndices.unbind();
 
     /* Make a nice animation for the triangles */
-    float r = 0.0;
+    float r         = 0.0;
     float increment = 0.1f;
 
     /* Create a renderer class */
@@ -184,7 +152,8 @@ int Window::open() {
     float yAngle = 0.0f;
     /* Loop until the user closes the window_ */
     while (!glfwWindowShouldClose(window_)) {
-        renderer.clear({159.0f/255.0f, 195.0f/255.0f, 252.0f/255.0f, 0.1});
+        renderer.clear(
+            {159.0f / 255.0f, 195.0f / 255.0f, 252.0f / 255.0f, 0.1});
         renderer.beginScene();
 
         /* Set the uniform to the texture slot */
@@ -199,9 +168,9 @@ int Window::open() {
         renderer.draw(pyramid, pyramidIndices, shaders);
         model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 2.0f));
         model = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-		shaders.setUniformMat4F("uModel", model);
-		// shaders.setUniformMat4F("uView", view);
-		// shaders.setUniformMat4F("uProj", proj);
+        shaders.setUniformMat4F("uModel", model);
+        // shaders.setUniformMat4F("uView", view);
+        // shaders.setUniformMat4F("uProj", proj);
         shaders.setUniformMat4F("uViewProjection", camera.getViewProjection());
 
         int state = glfwGetMouseButton(window_, GLFW_MOUSE_BUTTON_LEFT);
@@ -209,37 +178,30 @@ int Window::open() {
 
         // xVel = xPos - xPosLast;
         // yVel = yPos - yPosLast;
-        xVel = xPos - xPosLast;
-        yVel = yPos - yPosLast;
-        glm::vec3 curPos = camera.getCamPosInWorld();
+        xVel                = xPos - xPosLast;
+        yVel                = yPos - yPosLast;
+        glm::vec3 curPos    = camera.getCamPosInWorld();
         glm::vec3 curPosCam = camera.getCamPosInPivot();
 
-        if (state == GLFW_PRESS){
-            float dXAngle = (2*M_PI / windowWidth_), dYAngle = (M_PI / windowHeight_);
-            xAngle = -xVel*dXAngle;
-            yAngle = -yVel*dYAngle;
-
+        if (state == GLFW_PRESS) {
+            float dXAngle = (2 * M_PI / windowWidth_),
+                  dYAngle = (M_PI / windowHeight_);
+            xAngle        = -xVel * dXAngle;
+            yAngle        = -yVel * dYAngle;
 
             camera.rotatePivot(xAngle, {0.0f, 1.0f, 0.0f});
             camera.rotatePivot(yAngle, {1.0f, 0.0f, 0.0f});
         }
-        camera.setCamPosInPivot(
-            {
-                curPosCam.x,
-                curPosCam.y,
-                curPosCam.z + windowData.getScrollY()*0.1
-            }
-        );
+        camera.setCamPosInPivot({curPosCam.x, curPosCam.y,
+                                 curPosCam.z + pWindowEvents->inputs.getScrollY() * 0.1});
         state = glfwGetMouseButton(window_, GLFW_MOUSE_BUTTON_RIGHT);
-        if (state == GLFW_PRESS){
-            camera.setCamPosInPivot(
-                {
-                    curPosCam.x - xVel*0.001,
-                    curPosCam.y + yVel*0.001,
-                    /* Needs to be changed by scroolling */
-                    curPosCam.z, 
-                }
-            );
+        if (state == GLFW_PRESS) {
+            camera.setCamPosInPivot({
+                curPosCam.x - xVel * 0.001,
+                curPosCam.y + yVel * 0.001,
+                /* Needs to be changed by scroolling */
+                curPosCam.z,
+            });
         }
 
         xPosLast = xPos;
@@ -263,4 +225,4 @@ int Window::open() {
 
     return 0;
 }
-} // namespace vobo
+}  // namespace vobo

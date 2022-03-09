@@ -5,6 +5,7 @@
 #ifndef _vobo_common_h_
 #define _vobo_common_h_
 #include "vobo_pch.h"
+#include "vobo_memory.h"
 
 namespace vobo {
 

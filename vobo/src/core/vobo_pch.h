@@ -8,7 +8,6 @@
 #include <fstream>
 #include <filesystem>
 #include <string>
-#include <algorithm>
 
 /* STL data structures */
 #include <vector>
@@ -19,8 +18,10 @@
 #include <deque>
 #include <array>
 
-/* Fancy */
+/* General useful headers */
 #include <functional>
+#include <memory>
+#include <algorithm>
 
 /* My own headers */
 #include "vobo_math.h"
