@@ -36,4 +36,20 @@ std::ostream& operator<<(std::ostream& os, const glm::mat4& matrix) {
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const glm::vec4& vector) {
+    int length = vector.length();
+    os << "[";
+    for (int i=0 ;i < length; i++) {
+        os << vector[i] << (i == length-1 ? "]": ", ");
+    }
+    return os;
+}
+std::ostream& operator<<(std::ostream& os, const glm::vec3& vector) {
+    int length = vector.length();
+    os << "[";
+    for (int i=0 ;i < length; i++) {
+        os << vector[i] << (i == (length-1) ? "]": ", ");
+    }
+    return os;
+}
 } // namespace vobo

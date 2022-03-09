@@ -10,6 +10,8 @@ PointerAlignment: Left
 # Ben's personal stuff
 IndentWidth: 4
 AlignTrailingComments: true
+AlignConsecutiveAssignments: true
+IndentAccessModifiers: true
 
 
 IncludeBlocks: Merge

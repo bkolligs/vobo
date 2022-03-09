@@ -1,6 +1,7 @@
 #ifndef _vobo_h_
 #define _vobo_h_
 
-#include "main_window.h"
+#include "window.h"
+#include "core.h"
 
 #endif //_vobo_h_ header

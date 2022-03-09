@@ -1,4 +1,4 @@
-#include "main_window.h"
+#include "window.h"
 
 namespace vobo
 {
@@ -9,22 +9,22 @@ void GLAPIENTRY errorCallback(GLenum source, GLenum type, GLuint id,
     handleErrorDisplay(source, type, id, severity, length, message, userParam);
 }
 
-MainWindow::MainWindow(int width, int height, bool verbose, bool debug)
-    : window_width_{width},
-      window_height_{height},
+Window::Window(int width, int height, bool verbose, bool debug)
+    : windowWidth_{width},
+      windowHeight_{height},
       verbose_{verbose},
       debug_{debug} {
 
 
     int result = initialize();
 }
-MainWindow::~MainWindow() {
+Window::~Window() {
     /* Destroy the window object */
     glfwDestroyWindow(window_);
     glfwTerminate();
 }
 
-int MainWindow::initialize() {
+int Window::initialize() {
     // Initialize GLFW so we can use the following functions
     if (!glfwInit()) {
         VOBO_ERROR_LOG("Failed to initialize GLFW");
@@ -38,7 +38,7 @@ int MainWindow::initialize() {
     /* Set up anti-aliasing */
     glfwWindowHint(GLFW_SAMPLES, 4);
     /* Create a windowed mode window and its OpenGL context */
-    window_ = glfwCreateWindow(window_width_, window_height_,
+    window_ = glfwCreateWindow(windowWidth_, windowHeight_,
                                main_window_name_.c_str(), NULL, NULL);
     if (!window_) {
         VOBO_ERROR_LOG("Failed to create GLFW window");
@@ -56,9 +56,13 @@ int MainWindow::initialize() {
         VOBO_ERROR_LOG("Could not load GLEW!");
         return -1;
     }
+    /* Set the viewport to default to size of window */
+    glViewport(0, 0, windowWidth_, windowHeight_);
+
+    /* Set the GLFW window pointer */
+    glfwSetWindowUserPointer(window_, &windowData);
 
     /* Enable the error callback */
-
     if (debug_) {
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
         glDebugMessageCallback(errorCallback, 0);
@@ -70,10 +74,26 @@ int MainWindow::initialize() {
                            << "\n\tVendor: " << glGetString(GL_VENDOR)
                            << "\n\tDevice: " << glGetString(GL_RENDERER));
 
+    glfwSetKeyCallback(window_, [](GLFWwindow * window, int key, int scancode, int action, int mods){
+        VOBO_DEBUG_LOG("Window recieved the following key: " << key);
+    });
+    glfwSetMouseButtonCallback(window_, [](GLFWwindow * window, int button, int action, int mods){
+        double xPos, yPos;
+        if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
+            glfwGetCursorPos(window, &xPos, &yPos);
+            VOBO_DEBUG_LOG("Pressed the left mouse button! Pressed at: (" << xPos << "," << yPos << ")");
+
+        }
+    });
+    glfwSetScrollCallback(window_, [](GLFWwindow * window, double xOffset, double yOffset){
+        WindowInputs * data = (WindowInputs *) glfwGetWindowUserPointer(window);
+        data->setScrollY(yOffset);
+    });
     return 0;
 }
 
-int MainWindow::open() {
+
+int Window::open() {
     /* generate a buffer to store the pyramidVertices of the triangle */
     float pyramidVertices[] = {
         -0.5f, 0.0f,  0.5f,  0.1f, 0.0f, 0.02f, 
@@ -156,10 +176,12 @@ int MainWindow::open() {
     /* Create a renderer class */
     Renderer renderer;
     // OrthographicCamera camera(-1, 1, -1, 1);
-    PerspectiveCamera camera(60, window_width_, window_height_);
-    camera.setPosition({0.0f, 0.5f, 2.0f});
-    camera.setRotation(-10.0f, {1.0f, 0.0f, 0.0f});
-
+    PerspectiveCamera camera(60, windowWidth_, windowHeight_);
+    camera.setCamPosInPivot({0.0f, 0.0f, 3.0f});
+    /* For mouse velocity calculations */
+    double xPos, yPos, xPosLast, yPosLast, xVel, yVel;
+    float xAngle = 0.0f;
+    float yAngle = 0.0f;
     /* Loop until the user closes the window_ */
     while (!glfwWindowShouldClose(window_)) {
         renderer.clear({159.0f/255.0f, 195.0f/255.0f, 252.0f/255.0f, 0.1});
@@ -176,18 +198,60 @@ int MainWindow::open() {
         glm::mat4 proj = glm::mat4(1.0f);
         renderer.draw(pyramid, pyramidIndices, shaders);
         model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 2.0f));
-        model = glm::rotate(glm::mat4(1.0f), r, glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		shaders.setUniformMat4F("uModel", model);
 		// shaders.setUniformMat4F("uView", view);
 		// shaders.setUniformMat4F("uProj", proj);
         shaders.setUniformMat4F("uViewProjection", camera.getViewProjection());
-        if (r > 90.0f)
-            increment = -0.01f;
-        else if (r < 0.0f)
-            increment = 0.01f;
 
-        r += increment;
+        int state = glfwGetMouseButton(window_, GLFW_MOUSE_BUTTON_LEFT);
+        glfwGetCursorPos(window_, &xPos, &yPos);
 
+        // xVel = xPos - xPosLast;
+        // yVel = yPos - yPosLast;
+        xVel = xPos - xPosLast;
+        yVel = yPos - yPosLast;
+        glm::vec3 curPos = camera.getCamPosInWorld();
+        glm::vec3 curPosCam = camera.getCamPosInPivot();
+
+        if (state == GLFW_PRESS){
+            float dXAngle = (2*M_PI / windowWidth_), dYAngle = (M_PI / windowHeight_);
+            xAngle = -xVel*dXAngle;
+            yAngle = -yVel*dYAngle;
+
+
+            camera.rotatePivot(xAngle, {0.0f, 1.0f, 0.0f});
+            camera.rotatePivot(yAngle, {1.0f, 0.0f, 0.0f});
+        }
+        camera.setCamPosInPivot(
+            {
+                curPosCam.x,
+                curPosCam.y,
+                curPosCam.z + windowData.getScrollY()*0.1
+            }
+        );
+        state = glfwGetMouseButton(window_, GLFW_MOUSE_BUTTON_RIGHT);
+        if (state == GLFW_PRESS){
+            camera.setCamPosInPivot(
+                {
+                    curPosCam.x - xVel*0.001,
+                    curPosCam.y + yVel*0.001,
+                    /* Needs to be changed by scroolling */
+                    curPosCam.z, 
+                }
+            );
+        }
+
+        xPosLast = xPos;
+        yPosLast = yPos;
+        // if (r > 90.0f)
+        //     increment = -0.01f;
+        // else if (r < 0.0f)
+        //     increment = 0.01f;
+
+        // r += increment;
+
+        /* Handle event inputs? */
 
         renderer.endScene();
         /* Swap front and back buffers */

@@ -26,3 +26,15 @@ void Renderer::draw(const VertexArray& va, const IndexBuffer& eb, const Shader& 
 	glDrawElements(GL_TRIANGLES, eb.getCount(), GL_UNSIGNED_INT, nullptr);
 
 }
+
+void Renderer::beginScene() {
+
+}
+
+void Renderer::submit() {
+
+}
+
+void Renderer::endScene() {
+
+}

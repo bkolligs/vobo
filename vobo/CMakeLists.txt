@@ -15,40 +15,64 @@ find_package(glfw3 3.3 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 
-set(VOBO_INCLUDE_DIRS
-	deps/stb
-	inc
+set(VOBO_CAMERAS_SRC
+	src/cameras/orthographic_camera.cpp
+	src/cameras/perspective_camera.cpp
 )
+
+set(VOBO_RENDERER_SRC
+	src/renderer/shader.cpp
+	src/renderer/index_buffer.cpp
+	src/renderer/vertex_buffer.cpp
+	src/renderer/vertex_array.cpp
+	src/renderer/vertex_buffer_layout.cpp
+	src/renderer/texture.cpp
+	src/renderer/renderer.cpp
+)
+
+set(VOBO_CORE_SRC
+	src/core/error_display.cpp
+	src/core/vobo_math.cpp
+	)
+	
+set(VOBO_WINDOW_SRC
+	src/window/event_handler.cpp
+	src/window/window.cpp
+)
+
+set(VOBO_INCLUDE_DIRS
+	src
+	src/core
+	src/cameras
+	src/vertices
+	src/renderer
+	src/window
+)
+
 # handle dependencies
 add_subdirectory(deps/stb)
 
 
-add_library(vobo 
-	src/main_window.cpp
-	src/shader.cpp
-	src/vertex_buffer.cpp
-	src/vertex_buffer_layout.cpp
-	src/vertex_array.cpp
-	src/index_buffer.cpp
-	src/error_display.cpp
-	src/renderer.cpp
-	src/texture.cpp
-	src/orthographic_camera.cpp
-	src/perspective_camera.cpp
+add_library(vobo STATIC
+	${VOBO_CORE_SRC}
+	${VOBO_CAMERAS_SRC}
+	${VOBO_WINDOW_SRC}
+	${VOBO_RENDERER_SRC}
 )
 
 
 # precompile all the standard library stuff that we use
-target_precompile_headers(vobo PUBLIC inc/vobo_pch.h)
+target_precompile_headers(vobo PUBLIC src/core/vobo_pch.h)
+# Set some preprocessor directives that are useful
+target_compile_definitions(vobo PUBLIC VOBO_SOURCE_DIR="${VOBO_SOURCE_DIR}/")
 
-target_link_libraries(vobo 
+target_link_libraries(vobo PUBLIC
 	OpenGL::GL
 	glfw
 	GLEW
 	sf_libs
 )
 
-# Has to be public since this is a library being pulled into other targets
 target_include_directories(vobo PUBLIC
 	${VOBO_INCLUDE_DIRS}
 )

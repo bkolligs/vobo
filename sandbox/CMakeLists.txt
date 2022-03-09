@@ -4,8 +4,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
 add_executable(sandbox src/sandbox.cpp)
 set(SANDBOX_INCLUDE_DIRS
-	inc
-	${VOBO_SOURCE_DIR}/inc
+	${VOBO_SOURCE_DIR}/src
 )
 
 target_link_libraries(sandbox vobo)

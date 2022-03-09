@@ -7,11 +7,13 @@
 #include "vobo_pch.h"
 
 namespace vobo {
-namespace fs = std::filesystem;
-// This is a const string to the path of the `vobo/` directory
-const std::string filePath = __FILE__;
-const std::string VOBO_SRC_DIR =
-    filePath.substr(0, filePath.find("common.h")) + "../";
+
+/**
+ * This string is set by vobo/CMakeLists.txt since CMake provides a nice interface for this.
+ * Can set preprocessor definitions with `target_compile_definitions`
+ */
+const std::string VOBO_SRC_DIR = VOBO_SOURCE_DIR;
+
 }  // namespace vobo
 
 #endif  //_vobo_common_h_ header
