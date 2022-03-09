@@ -14,6 +14,15 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include <queue>
+#include <stack>
+#include <deque>
 #include <array>
+
+/* Fancy */
+#include <functional>
+
+/* My own headers */
+#include "vobo_math.h"
 
 #endif //_vobo_pch_h_ header
