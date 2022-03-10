@@ -16,6 +16,7 @@ find_package(GLEW REQUIRED)
 set(VOBO_CAMERAS_SRC
 	src/cameras/orthographic_camera.cpp
 	src/cameras/perspective_camera.cpp
+	src/cameras/perspective_controller.cpp
 )
 
 set(VOBO_RENDERER_PRIMITIVES_SRC

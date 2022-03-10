@@ -137,15 +137,10 @@ int Window::open() {
     pyramidBuffer.unbind();
     pyramidIndices.unbind();
 
-    /* Make a nice animation for the triangles */
-    float r         = 0.0;
-    float increment = 0.1f;
-
     /* Create a renderer class */
     Renderer renderer;
-    // OrthographicCamera camera(-1, 1, -1, 1);
-    PerspectiveCamera camera(60, windowWidth_, windowHeight_);
-    camera.setCamPosInPivot({0.0f, 0.0f, 3.0f});
+    /* Set the camera controller */
+    PerspectiveController cameraController(events, 60, windowWidth_, windowHeight_);
     /* For mouse velocity calculations */
     double xPos, yPos, xPosLast, yPosLast, xVel, yVel;
     float xAngle = 0.0f;
@@ -157,7 +152,7 @@ int Window::open() {
         renderer.beginScene();
 
         /* Set the uniform to the texture slot */
-        // renderer.draw(squareArray, squareIB, shadersFlat);
+        renderer.draw(squareArray, squareIB, shadersFlat);
         // shadersFlat.setUniformInt("uTexture", 0);
         // model pose matrix
         glm::mat4 model = glm::mat4(1.0f);
@@ -169,34 +164,9 @@ int Window::open() {
         model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 2.0f));
         model = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
         shaders.setUniformMat4F("uModel", model);
-        // shaders.setUniformMat4F("uView", view);
-        // shaders.setUniformMat4F("uProj", proj);
-        shaders.setUniformMat4F("uViewProjection", camera.getViewProjection());
+        shaders.setUniformMat4F("uViewProjection", cameraController.getCamera().getViewProjection());
 
-        xVel = events.getMouseXVel();
-        yVel = events.getMouseYVel();
-        glm::vec3 curPos    = camera.getCamPosInWorld();
-        glm::vec3 curPosCam = camera.getCamPosInPivot();
-
-        if (events.isMousePressed(GLFW_MOUSE_BUTTON_LEFT)) {
-            float dXAngle = (2 * M_PI / windowWidth_),
-                  dYAngle = (M_PI / windowHeight_);
-            xAngle        = -xVel * dXAngle;
-            yAngle        = -yVel * dYAngle;
-
-            camera.rotatePivot(xAngle, {0.0f, 1.0f, 0.0f});
-            camera.rotatePivot(yAngle, {1.0f, 0.0f, 0.0f});
-        }
-        camera.setCamPosInPivot({curPosCam.x, curPosCam.y,
-                                 curPosCam.z + events.inputs.getScrollY() * 0.1});
-        if (events.isMousePressed(GLFW_MOUSE_BUTTON_RIGHT)) {
-            camera.setCamPosInPivot({
-                curPosCam.x - xVel * 0.001,
-                curPosCam.y + yVel * 0.001,
-                /* Needs to be changed by scroolling */
-                curPosCam.z,
-            });
-        }
+        cameraController.onUpdate();
 
         renderer.endScene();
         onUpdate();

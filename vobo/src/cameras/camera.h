@@ -47,12 +47,12 @@ class Camera {
         /* Get camera pivot rotation in the world frame  */
         const glm::mat4& getPivotOri() const { return pivotOriInWorld_; }
         /* Set the pivot position in the world frame */
-        void setPivotPos(glm::vec3&& target) {
+        void setPivotPos(const glm::vec3& target) {
             pivotPosInWorld_ = target;
             recalculateViewMatrix();
         }
         /* Rotate the pivot in the world frame */
-        void rotatePivot(float angle, glm::vec3&& axis) {
+        void rotatePivot(float angle, const glm::vec3& axis) {
             pivotOriInWorld_ = glm::rotate(pivotOriInWorld_, angle, axis);
             recalculateViewMatrix();
         }
@@ -66,9 +66,9 @@ class Camera {
 		/* Get the camera rotation in the pivot frame */
 		const glm::mat4& getCamOriInPivot() const {return camOriInPivot_;}
 		/* Set the camera position in the pivot frame */
-		void setCamPosInPivot(glm::vec3&& position) {camPosInPivot_ = position; recalculateViewMatrix();}
+		void setCamPosInPivot(const glm::vec3& position) {camPosInPivot_ = position; recalculateViewMatrix();}
 		/* Rotate the camera in the pivot frame */
-		void rotateCamInPivot(float angle, glm::vec3 && axis){
+		void rotateCamInPivot(float angle, const glm::vec3 & axis){
 			glm::rotate(camOriInPivot_, angle, axis);
 			recalculateViewMatrix();
 		}

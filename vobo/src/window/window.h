@@ -14,6 +14,7 @@
 #include "log.h"
 #include "orthographic_camera.h"
 #include "perspective_camera.h"
+#include "perspective_controller.h"
 #include "renderer.h"
 #include "shader.h"
 #include "texture.h"
