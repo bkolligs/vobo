@@ -34,7 +34,7 @@ class Window {
         std::string mainWindowName_ = "Oculobo 2022v0.1";
 
     public:
-    	Ref<WindowEvents> pWindowEvents = std::make_shared<WindowEvents>();
+    	WindowEvents events;
         Window(int width = 640, int height = 480, bool verbose = true,
                bool debug = true);
         ~Window();
@@ -46,6 +46,10 @@ class Window {
          * Initializes GLFW
          */
         int initialize(void);
+        /**
+         * On Update
+         */
+        void onUpdate();
 };
 
 }  // namespace vobo

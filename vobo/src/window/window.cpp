@@ -57,7 +57,7 @@ int Window::initialize() {
     glViewport(0, 0, windowWidth_, windowHeight_);
 
     /* Initialize the window events and inputs callbacks */
-    int result = pWindowEvents->initialize(window_);
+    int result = events.initialize(window_);
 
     /* Enable the error callback */
     if (debug_) {
@@ -151,7 +151,7 @@ int Window::open() {
     float xAngle = 0.0f;
     float yAngle = 0.0f;
     /* Loop until the user closes the window_ */
-    while (!glfwWindowShouldClose(window_)) {
+    while (events.show()) {
         renderer.clear(
             {159.0f / 255.0f, 195.0f / 255.0f, 252.0f / 255.0f, 0.1});
         renderer.beginScene();
@@ -173,17 +173,12 @@ int Window::open() {
         // shaders.setUniformMat4F("uProj", proj);
         shaders.setUniformMat4F("uViewProjection", camera.getViewProjection());
 
-        int state = glfwGetMouseButton(window_, GLFW_MOUSE_BUTTON_LEFT);
-        glfwGetCursorPos(window_, &xPos, &yPos);
-
-        // xVel = xPos - xPosLast;
-        // yVel = yPos - yPosLast;
-        xVel                = xPos - xPosLast;
-        yVel                = yPos - yPosLast;
+        xVel = events.getMouseXVel();
+        yVel = events.getMouseYVel();
         glm::vec3 curPos    = camera.getCamPosInWorld();
         glm::vec3 curPosCam = camera.getCamPosInPivot();
 
-        if (state == GLFW_PRESS) {
+        if (events.isMousePressed(GLFW_MOUSE_BUTTON_LEFT)) {
             float dXAngle = (2 * M_PI / windowWidth_),
                   dYAngle = (M_PI / windowHeight_);
             xAngle        = -xVel * dXAngle;
@@ -193,9 +188,8 @@ int Window::open() {
             camera.rotatePivot(yAngle, {1.0f, 0.0f, 0.0f});
         }
         camera.setCamPosInPivot({curPosCam.x, curPosCam.y,
-                                 curPosCam.z + pWindowEvents->inputs.getScrollY() * 0.1});
-        state = glfwGetMouseButton(window_, GLFW_MOUSE_BUTTON_RIGHT);
-        if (state == GLFW_PRESS) {
+                                 curPosCam.z + events.inputs.getScrollY() * 0.1});
+        if (events.isMousePressed(GLFW_MOUSE_BUTTON_RIGHT)) {
             camera.setCamPosInPivot({
                 curPosCam.x - xVel * 0.001,
                 curPosCam.y + yVel * 0.001,
@@ -204,25 +198,19 @@ int Window::open() {
             });
         }
 
-        xPosLast = xPos;
-        yPosLast = yPos;
-        // if (r > 90.0f)
-        //     increment = -0.01f;
-        // else if (r < 0.0f)
-        //     increment = 0.01f;
-
-        // r += increment;
-
-        /* Handle event inputs? */
-
         renderer.endScene();
+        onUpdate();
+    }
+
+    return 0;
+}
+
+void Window::onUpdate() {
         /* Swap front and back buffers */
         glfwSwapBuffers(window_);
 
         /* Poll for and process events */
         glfwPollEvents();
-    }
-
-    return 0;
 }
+
 }  // namespace vobo
