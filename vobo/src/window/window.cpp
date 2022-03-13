@@ -141,10 +141,6 @@ int Window::open() {
     Renderer renderer;
     /* Set the camera controller */
     PerspectiveController cameraController(events, 60, windowWidth_, windowHeight_);
-    /* For mouse velocity calculations */
-    double xPos, yPos, xPosLast, yPosLast, xVel, yVel;
-    float xAngle = 0.0f;
-    float yAngle = 0.0f;
     /* Loop until the user closes the window_ */
     while (events.show()) {
         renderer.clear(

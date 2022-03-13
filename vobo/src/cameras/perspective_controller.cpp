@@ -19,6 +19,7 @@ void PerspectiveController::onUpdate() {
     double yVel = inputs_.getMouseYVel();
     /* Get the camera position in pivot */
     glm::vec3 camPosPivot = camera_.getCamPosInPivot();
+    glm::vec3 pivotPos = camera_.getPivotPos();
 
     /* Orbit around pivot */
     if (inputs_.isMousePressed(GLFW_MOUSE_BUTTON_LEFT)) {
@@ -43,11 +44,16 @@ void PerspectiveController::onUpdate() {
         camera_.setCamPosInPivot({
             camPosPivot.x - xVel * xPanSpeed_,
             camPosPivot.y + yVel * yPanSpeed_,
-            /* Needs to be changed by scroolling */
             camPosPivot.z,
         });
     }
 
-    /* TODO: Add functionality to move the pivot when holding down control */
+    if (inputs_.isMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)) {
+        camera_.setPivotPos({
+            pivotPos.x + xVel * xPanSpeed_,
+            pivotPos.y + yVel * yPanSpeed_,
+            pivotPos.z
+        });
+    }
 }
 }  // namespace vobo
