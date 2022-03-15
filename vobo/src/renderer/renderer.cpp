@@ -1,5 +1,10 @@
 #include "renderer.h"
 
+namespace vobo
+{
+	
+
+
 Renderer::Renderer(/* args */)
 {
 	/* Enable depth testing so that OpenGL renders far away vertices behind closer ones */
@@ -38,3 +43,5 @@ void Renderer::submit() {
 void Renderer::endScene() {
 
 }
+
+} // namespace vobo

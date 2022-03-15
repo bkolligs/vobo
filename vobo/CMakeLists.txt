@@ -9,10 +9,6 @@ if (${USE_SANITIZER})
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
 endif()
 
-find_package(glfw3 3.3 REQUIRED)
-find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
-
 set(VOBO_CAMERAS_SRC
 	src/cameras/orthographic_camera.cpp
 	src/cameras/perspective_camera.cpp
@@ -20,7 +16,7 @@ set(VOBO_CAMERAS_SRC
 )
 
 set(VOBO_RENDERER_PRIMITIVES_SRC
-	src/renderer/primitives/
+	src/renderer/primitives/primitive_library.cpp
 )
 
 set(VOBO_RENDERER_VERTICES_SRC
@@ -57,10 +53,15 @@ set(VOBO_INCLUDE_DIRS
 	src/renderer/vertices
 	src/renderer/primitives
 	src/window
+	deps/glm
+	deps/glad
 )
 
 # handle dependencies
 add_subdirectory(deps/stb)
+add_subdirectory(deps/glm)
+add_subdirectory(deps/glad)
+add_subdirectory(deps/glfw)
 
 
 add_library(vobo STATIC
@@ -75,10 +76,10 @@ target_include_directories(vobo PUBLIC
 )
 
 target_link_libraries(vobo PUBLIC
-	OpenGL::GL
 	glfw
-	GLEW
 	sf_libs
+	glm::glm
+	glad
 )
 
 # precompile all the standard library stuff that we use

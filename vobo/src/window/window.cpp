@@ -49,8 +49,12 @@ int Window::initialize() {
     glfwSwapInterval(1);
 
     /* Actually load the OpenGL specified functions with GLEW */
-    if (glewInit() != GLEW_OK) {
-        VOBO_ERROR_LOG("Could not load GLEW!");
+    // if (glewInit() != GLEW_OK) {
+    //     VOBO_ERROR_LOG("Could not load GLEW!");
+    //     return -1;
+    // }
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
+        VOBO_ERROR_LOG("Could not load OpenGL!");
         return -1;
     }
     /* Set the viewport to default to size of window */

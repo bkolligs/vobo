@@ -1,8 +1,8 @@
 #ifndef _vobo_window_h_
 #define _vobo_window_h_
 
-// include GLEW which allows us to access the modern GL
-#include <GL/glew.h>
+// include GLAD which allows us to access the modern GL
+#include "glad.h"
 // GLFW focuses on opening a window on the OS
 #include <GLFW/glfw3.h>
 // precompiled headers and common types

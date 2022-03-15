@@ -1,7 +1,7 @@
 #ifndef _vertex_buffer_element_h_
 #define _vertex_buffer_element_h_
 
-#include <GL/glew.h>
+#include "glad.h"
 #include "vobo_pch.h"
 #include "log.h"
 

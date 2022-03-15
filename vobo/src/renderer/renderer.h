@@ -2,17 +2,24 @@
 #define _renderer_h_
 
 
-#include <GL/glew.h>
+#include "glad.h"
+#include "vobo_memory.h"
 #include "log.h"
 #include "vobo_pch.h"
 #include "vertex_array.h"
 #include "index_buffer.h"
 #include "shader.h"
+#include "primitive_library.h"
+
+namespace vobo
+{
 
 class Renderer
 {
 private:
 	unsigned int renderID_; 
+	Ref<PrimitiveLibrary> primitiveLibrary_;
+	
 public:
 	Renderer(/* args */);
 	~Renderer();
@@ -23,4 +30,5 @@ public:
 	void draw(const VertexArray& va, const IndexBuffer& eb, const Shader& shader) const;
 };
 
+} // namespace vobo
 #endif //_renderer_h_ header

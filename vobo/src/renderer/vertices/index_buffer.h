@@ -1,7 +1,7 @@
 #ifndef _index_buffer_h_
 #define _index_buffer_h_
 
-#include "GL/glew.h"
+#include "glad.h"
 
 /**
  * Element buffer object for using indices

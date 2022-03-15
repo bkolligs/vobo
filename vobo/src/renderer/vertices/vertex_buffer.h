@@ -1,7 +1,7 @@
 #ifndef _vertex_buffer_h_
 #define _vertex_buffer_h_
 
-#include "GL/glew.h"
+#include "glad.h"
 
 /**
  * Vertex buffer object for OpenGL

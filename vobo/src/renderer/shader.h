@@ -3,7 +3,7 @@
 
 #include "log.h"
 #include "vobo_pch.h"
-#include <GL/glew.h>
+#include "glad.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 

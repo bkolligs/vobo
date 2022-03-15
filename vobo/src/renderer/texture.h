@@ -3,7 +3,7 @@
 
 
 #include "vobo_pch.h"
-#include "GL/glew.h"
+#include "glad.h"
 #include "stb_image.h"
 #include "log.h"
 
