@@ -1,0 +1,26 @@
+name: Vobo Clone Integrity
+on: 
+  push: 
+    branches: 
+      - main
+
+  # Allows for running manually from Actions tab
+  workflow_dispatch:
+
+jobs:
+  Clone:
+    name: Clone
+    runs-on: ubuntu-latest
+    steps:
+      - uses: AutoModality/action-clean@v1.1.0
+      - name: Checkout feature branch
+        uses: actions/checkout@v2.3.1
+        with: 
+          ref: main
+          submodules: 'recursive'
+
+      - name: Workflow Trigger
+        run: | 
+          printf "Cloning Vobo into directory" 
+          printf "Building feature branch '${{github.ref}}'"
+          ls -la

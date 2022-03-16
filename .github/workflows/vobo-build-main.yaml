@@ -1,0 +1,50 @@
+name: Vobo Build Main
+on: 
+
+  pull_request:
+    branches:
+      - main
+
+  # Allows for running manually from Actions tab
+  workflow_dispatch:
+
+# Customize the CMake build type here
+env: 
+  BUILD_TYPE: Debug
+
+jobs:
+  Setup:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: AutoModality/action-clean@v1.1.0
+      - name: Checkout feature branch
+        uses: actions/checkout@v2.3.1
+        with: 
+          ref: main
+          submodules: 'recursive'
+
+      - name: Workflow Trigger
+        run: | 
+          printf "Building Vobo feature based on the event '${{github.event_name}}'\n" 
+          printf "Building feature branch '${{github.ref}}'"
+          ls -la
+
+      - name: Install Build Dependencies
+        run: sudo apt update && sudo apt upgrade && sudo apt install xorg-dev
+
+      - name: Configure CMake
+        run: | 
+          ls -la ${{github.workspace}}
+          pwd
+          # remove the build directory if it already exists
+          [ -d ${{github.workspace}}/build ] && rm -rf ${{github.workspace}}/build
+          # Create the build directory
+          mkdir ${{github.workspace}}/build 
+          cd ${{github.workspace}}/build 
+          cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} .. 
+
+      - name: Build Vobo
+        working-directory: ${{github.workspace}}/build
+        # build the program with the given configuration
+        run: make
