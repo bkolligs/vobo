@@ -2,7 +2,7 @@ name: Vobo Build Feature
 on: 
   push: 
     branches: 
-      -feat/*
+      -feat/github-workflows
 
   # Allows for running manually from Actions tab
   workflow_dispatch:
