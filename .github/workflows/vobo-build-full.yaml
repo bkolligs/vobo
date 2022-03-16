@@ -17,5 +17,4 @@ jobs:
     name: Setup
     runs-on: ubuntu-latest
     steps:
-      - name: setup
       - run: echo "hello"
