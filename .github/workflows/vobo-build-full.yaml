@@ -1,1 +1,22 @@
 name: Vobo Build Full
+on: 
+  push: 
+    branches: [feat/github-workflows]
+  pull_request:
+    branches: [main]
+
+  # Allows for running manually from Actions tab
+  workflow_dispatch:
+
+# Customize the CMake build type here
+env: 
+  BUILD_TYPE: Debug
+
+jobs:
+  Setup:
+    name: Setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup
+        echo "Setting up the environment..."
+ame: Vobo Build Full
