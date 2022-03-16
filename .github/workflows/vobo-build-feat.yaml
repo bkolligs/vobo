@@ -21,5 +21,6 @@ jobs:
       - name: Workflow Trigger
         run: printf "Building Vobo feature based on the event '${{github.event_name}}'\n" && printf "Building feature branch '${{github.ref}}'"
       - name: Configure CMake
-        run: mkdir build && cd build && pwd && cmake ..
-      - run: pwd
+        run: mkdir build && cd build && pwd 
+      - run: ls -l ../
+      - run: ls -l ../../
