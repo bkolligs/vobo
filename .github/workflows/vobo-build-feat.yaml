@@ -24,5 +24,7 @@ jobs:
 
       - name: Workflow Trigger
         run: printf "Building Vobo feature based on the event '${{github.event_name}}'\n" && printf "Building feature branch '${{github.ref}}'"
+      - name: Install Build Dependencies
+        run: apt install libxrandr
       - name: Configure CMake
         run: mkdir build && cd build && cmake .. 
