@@ -1,7 +1,7 @@
 name: Vobo Build Full
 on: 
   push: 
-    branches: [main]
+    branches: [feat/github-workflows]
   pull_request:
     branches: [main]
 
