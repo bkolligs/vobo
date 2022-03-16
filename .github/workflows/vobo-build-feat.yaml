@@ -19,8 +19,8 @@ jobs:
       - name: Checkout feature branch
         uses: actions/checkout@v2.3.1
       - name: Workflow Trigger
-        run: echo "Building Vobo feature based on the event '${{github.event_name}}'"
-             echo "Building feature branch '${{github.ref}}'"
-      - run: ls -la
-      - run: mkdir build && cd build 
+        run: printf "Building Vobo feature based on the event '${{github.event_name}}'\n"
+             printf "Building feature branch '${{github.ref}}'"
+      - name: Configure CMake
+        run: mkdir build && cd build && ls -la
       - run: pwd
