@@ -22,4 +22,5 @@ jobs:
         run: echo "Building Vobo feature based on the event '${{github.event_name}}'"
              echo "Building feature branch '${{github.ref}}'"
       - run: ls -la
-      - run: mkdir build && cd build && cmake ..
+      - run: mkdir build && cd build 
+      - run: pwd
