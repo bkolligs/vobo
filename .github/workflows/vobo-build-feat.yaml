@@ -33,7 +33,9 @@ jobs:
       - name: Install Build Dependencies
         run: sudo apt update && sudo apt upgrade && sudo apt install xorg-dev
       - name: Configure CMake
-        run: [ -d ${{github.workspace}}/build] && rm -rf ${{github.workspace}}/build
+        run: | 
+          # remove the build directory if it already exists
+          [ -d ${{github.workspace}}/build] && rm -rf ${{github.workspace}}/build
           # Create the build directory
           mkdir ${{github.workspace}}/build 
           cd ${{github.workspace}}/build 
