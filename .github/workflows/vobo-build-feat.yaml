@@ -37,11 +37,10 @@ jobs:
           # remove the build directory if it already exists
           [ -d ${{github.workspace}}/build ] && rm -rf ${{github.workspace}}/build
           # Create the build directory
+          ls -la ${{github.workspace}}
           mkdir ${{github.workspace}}/build 
           cd ${{github.workspace}}/build 
           pwd
-          ls -la 
-          ls -la ../../
           cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} .. 
 
   Build:
