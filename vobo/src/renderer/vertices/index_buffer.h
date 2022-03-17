@@ -3,6 +3,10 @@
 
 #include "glad.h"
 
+namespace vobo
+{
+    
+
 /**
  * Element buffer object for using indices
  */
@@ -20,4 +24,5 @@ class IndexBuffer {
     int getCount() const { return count_; }
 };
 
+} // namespace vobo
 #endif  //_index_buffer_h_ header

@@ -1,5 +1,8 @@
 #include "vertex_array.h"
 
+namespace vobo
+{
+    
 VertexArray::VertexArray(bool verbose) : verbose_{verbose} { glGenVertexArrays(1, &renderID_); }
 
 VertexArray::~VertexArray() { glDeleteVertexArrays(1, &renderID_); }
@@ -28,3 +31,4 @@ void VertexArray::linkVBO(VertexBuffer& vbo, VertexBufferLayout& layout) {
 
 void VertexArray::bind() const { glBindVertexArray(renderID_); }
 void VertexArray::unbind() const { glBindVertexArray(0); }
+} // namespace vobo

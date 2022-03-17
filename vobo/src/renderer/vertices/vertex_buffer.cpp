@@ -1,6 +1,9 @@
 #include "vertex_buffer.h"
 
-VertexBuffer::VertexBuffer(float* vertices, int size) {
+namespace vobo
+{
+    
+VertexBuffer::VertexBuffer(const void* vertices, size_t size) {
     /* Generate a buffer to store the vertices in */
     glGenBuffers(1, &renderID_);
     /* bind the current array buffer */
@@ -13,3 +16,5 @@ VertexBuffer::~VertexBuffer() { glDeleteBuffers(1, &renderID_); }
 
 void VertexBuffer::bind() const { glBindBuffer(GL_ARRAY_BUFFER, renderID_); }
 void VertexBuffer::unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
+
+} // namespace vobo

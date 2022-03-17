@@ -4,6 +4,9 @@
 #include "vertex_buffer.h"
 #include "vertex_buffer_layout.h"
 
+namespace vobo
+{
+    
 /**
  * Vertex Array object in OpenGL
  */
@@ -19,4 +22,5 @@ class VertexArray {
     void unbind() const;
 };
 
+} // namespace vobo
 #endif  //_vertex_array_h_ header
