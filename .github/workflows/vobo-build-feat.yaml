@@ -39,6 +39,8 @@ jobs:
           # Create the build directory
           mkdir ${{github.workspace}}/build 
           cd ${{github.workspace}}/build 
+          pwd
+          ls -l
           cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} .. 
 
   Build:
