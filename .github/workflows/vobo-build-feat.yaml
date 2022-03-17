@@ -35,7 +35,7 @@ jobs:
       - name: Configure CMake
         run: | 
           # remove the build directory if it already exists
-          [ -d ${{github.workspace}}/build] && rm -rf ${{github.workspace}}/build
+          [ -d ${{github.workspace}}/build ] && rm -rf ${{github.workspace}}/build
           # Create the build directory
           mkdir ${{github.workspace}}/build 
           cd ${{github.workspace}}/build 
