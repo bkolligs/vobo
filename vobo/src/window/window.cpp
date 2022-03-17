@@ -116,15 +116,9 @@ int Window::open() {
     while (events.showWindow()) {
         renderer.clear(
             {159.0f / 255.0f, 195.0f / 255.0f, 252.0f / 255.0f, 0.1});
-        renderer.beginScene();
+        renderer.beginScene(cameraController.getCamera());
 
-        // renderer.draw(testPyramid.getVertexArray(),
-                    //   testPyramid.getIndexBuffer(), shaders);
         renderer.draw(&testPyramid, shaders);
-        shaders.setUniformMat4F("uModel", testPyramid.getModelMatrix());
-        shaders.setUniformMat4F(
-            "uViewProjection",
-            cameraController.getCamera().getViewProjection());
 
         cameraController.onUpdate();
 

@@ -17,7 +17,7 @@ Pyramid::Pyramid(float x, float y, float z)
     /* link the vertex array and buffer objects */
     pyramidArray.linkVBO(pyramidBuffer, pyramidLayout);
 
-	translate(x, y, z);
+    translate(x, y, z);
 }
 
 Pyramid::~Pyramid() {}
@@ -30,6 +30,11 @@ void Pyramid::unbind() const {
     pyramidArray.unbind();
     pyramidIndices.unbind();
     pyramidBuffer.unbind();
+}
+
+bool Pyramid::modifyShader(Shader& shader) const {
+    /* Do stuff with the shader and return true if successful*/
+    return true;
 }
 
 }  // namespace vobo

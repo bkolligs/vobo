@@ -51,10 +51,11 @@ class Pyramid : public MeshObject {
         VertexBufferLayout pyramidLayout;
 
     public:
-        Pyramid(float x=0, float y=0, float z=0);
+        Pyramid(float x = 0, float y = 0, float z = 0);
         ~Pyramid();
         void bind() const override;
         void unbind() const override;
+        bool modifyShader(Shader& shader) const override;
         const VertexArray& getVertexArray() const override {
             return pyramidArray;
         }

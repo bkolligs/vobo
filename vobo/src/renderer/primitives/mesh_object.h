@@ -1,6 +1,7 @@
 #ifndef _mesh_object_h_
 #define _mesh_object_h_
 
+#include "shader.h"
 #include "vertices.h"
 
 namespace vobo {
@@ -12,8 +13,9 @@ class MeshObject {
         MeshObject() : objectPose_{1.0f} {}
 
     public:
-        virtual void bind() const                   = 0;
-        virtual void unbind() const                 = 0;
+        virtual void bind() const                         = 0;
+        virtual void unbind() const                       = 0;
+        virtual bool modifyShader(Shader& shader) const   = 0;
         virtual const VertexArray& getVertexArray() const = 0;
         virtual const IndexBuffer& getIndexBuffer() const = 0;
 

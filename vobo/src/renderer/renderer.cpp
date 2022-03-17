@@ -17,15 +17,24 @@ void Renderer::clear(const std::array<float, 4> backgroundColor) {
     /* Render here clear the depth buffer bit and the color bit*/
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-void Renderer::draw(const MeshObject* object, const Shader& shader) const {
-    if (object) {
+void Renderer::draw(const MeshObject* object, Shader& shader) const {
+    if (object && pSceneCamera_) {
         object->bind();
         shader.bind();
+        /* Set the model matrix from the object */
+        shader.setUniformMat4F("uModel", object->getModelMatrix());
+        shader.setUniformMat4F("uViewProjection", pSceneCamera_->getViewProjection());
+        /* Load any other object specific uniforms into the shader */
+        object->modifyShader(shader);
+
         /* Draw elements */
         glDrawElements(GL_TRIANGLES, object->getIndexBuffer().getCount(),
                        GL_UNSIGNED_INT, nullptr);
     } else
-        throw std::runtime_error("[Renderer] MeshObject Pointer is Null!");
+    {
+        if (not object) throw std::runtime_error("[Renderer] MeshObject Pointer is Null!");
+        else if (not pSceneCamera_) throw std::runtime_error("[Renderer] SceneCamera Pointer is Null");
+    }
 }
 
 void Renderer::draw(const VertexArray& va, const IndexBuffer& eb,
@@ -38,7 +47,10 @@ void Renderer::draw(const VertexArray& va, const IndexBuffer& eb,
     glDrawElements(GL_TRIANGLES, eb.getCount(), GL_UNSIGNED_INT, nullptr);
 }
 
-void Renderer::beginScene() {}
+void Renderer::beginScene(const PerspectiveCamera & camera) {
+    /* Assign the pointer to the scene for now */
+    pSceneCamera_ = &camera;
+}
 
 void Renderer::submit() {}
 
