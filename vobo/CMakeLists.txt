@@ -17,6 +17,7 @@ set(VOBO_CAMERAS_SRC
 
 set(VOBO_RENDERER_PRIMITIVES_SRC
 	src/renderer/primitives/primitive_library.cpp
+	src/renderer/primitives/pyramid.cpp
 )
 
 set(VOBO_RENDERER_VERTICES_SRC
