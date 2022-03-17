@@ -25,6 +25,6 @@ jobs:
       - name: Workflow Trigger
         run: printf "Building Vobo feature based on the event '${{github.event_name}}'\n" && printf "Building feature branch '${{github.ref}}'"
       - name: Install Build Dependencies
-        run: sudo apt install xorg-dev
+        run: sudo apt update && sudo apt upgrade && sudo apt install xorg-dev
       - name: Configure CMake
         run: mkdir build && cd build && cmake .. 
