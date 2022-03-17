@@ -17,13 +17,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout feature branch
+        uses: AutoModality/action-clean@v1.1.0
         uses: actions/checkout@v2.3.1
         with: 
           ref: ${{ github.head_ref}}
           submodules: 'recursive'
 
       - name: Workflow Trigger
-        run: printf "Building Vobo feature based on the event '${{github.event_name}}'\n" && printf "Building feature branch '${{github.ref}}'"
+        run: | 
+          printf "Building Vobo feature based on the event '${{github.event_name}}'\n" 
+          printf "Building feature branch '${{github.ref}}'"
 
   Configure:
     name: Configure
@@ -34,13 +37,13 @@ jobs:
         # run: sudo apt update && sudo apt upgrade && sudo apt install xorg-dev
       - name: Configure CMake
         run: | 
+          ls -la ${{github.workspace}}
+          pwd
           # remove the build directory if it already exists
           [ -d ${{github.workspace}}/build ] && rm -rf ${{github.workspace}}/build
           # Create the build directory
-          ls -la ${{github.workspace}}
           mkdir ${{github.workspace}}/build 
           cd ${{github.workspace}}/build 
-          pwd
           cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} .. 
 
   Build:
