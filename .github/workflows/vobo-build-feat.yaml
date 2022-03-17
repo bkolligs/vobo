@@ -1,8 +1,10 @@
 name: Vobo Build Feature
 on: 
-  # push: 
-  #   branches: 
-  #     - feat/*
+  push: 
+    branches: 
+      - feat/*
+    tags:
+      - build
 
   pull_request:
     branches:
