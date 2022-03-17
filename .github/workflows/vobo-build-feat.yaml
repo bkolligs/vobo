@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: Setup
     steps:
-      - name: Install Build Dependencies
+      # - name: Install Build Dependencies
         # run: sudo apt update && sudo apt upgrade && sudo apt install xorg-dev
       - name: Configure CMake
         run: | 
