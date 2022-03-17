@@ -16,8 +16,8 @@ jobs:
     name: Setup
     runs-on: ubuntu-latest
     steps:
+      - uses: AutoModality/action-clean@v1.1.0
       - name: Checkout feature branch
-        uses: AutoModality/action-clean@v1.1.0
         uses: actions/checkout@v2.3.1
         with: 
           ref: ${{ github.head_ref}}
