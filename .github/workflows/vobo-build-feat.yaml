@@ -45,6 +45,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     needs: Configure
+    steps:
       - name: Build Vobo
         working-directory: ${{github.workspace}}/build
         # build the program with the given configuration
