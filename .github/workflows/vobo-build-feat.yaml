@@ -1,8 +1,6 @@
 name: Vobo Build Feature
 on: 
   push: 
-    branches: 
-      - feat/*
     tags:
       - build
 
