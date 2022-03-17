@@ -41,7 +41,7 @@ jobs:
           cd ${{github.workspace}}/build 
           pwd
           ls -la 
-          ls -la ../
+          ls -la ../../
           cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} .. 
 
   Build:
