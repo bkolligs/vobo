@@ -1,4 +1,4 @@
-name: Vobo Build Feature
+name: Vobo Build Main
 on: 
   push: 
     branches: 
