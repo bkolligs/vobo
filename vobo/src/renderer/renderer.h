@@ -28,6 +28,7 @@ public:
 	void endScene();
 	void clear(const std::array<float, 4> backgroundColor = {0.0f, 0.0f, 0.0f, 0.0f});
 	void draw(const VertexArray& va, const IndexBuffer& eb, const Shader& shader) const;
+	void draw(const MeshObject * object, const Shader& shader) const;
 };
 
 } // namespace vobo
