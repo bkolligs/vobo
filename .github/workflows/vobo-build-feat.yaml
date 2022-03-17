@@ -27,6 +27,7 @@ jobs:
         run: | 
           printf "Building Vobo feature based on the event '${{github.event_name}}'\n" 
           printf "Building feature branch '${{github.ref}}'"
+          ls -la
 
   Configure:
     name: Configure
