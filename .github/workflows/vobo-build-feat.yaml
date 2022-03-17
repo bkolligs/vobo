@@ -28,3 +28,5 @@ jobs:
         run: sudo apt update && sudo apt upgrade && sudo apt install xorg-dev
       - name: Configure CMake
         run: mkdir build && cd build && cmake .. 
+      - name: Build Vobo
+        run: make
