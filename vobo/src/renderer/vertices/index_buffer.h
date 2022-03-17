@@ -17,7 +17,7 @@ class IndexBuffer {
     /**
      * Generates an element buffer arrray and links it to indices
      */
-    IndexBuffer(unsigned int* indices, int count);
+    IndexBuffer(void* indices, int count);
     ~IndexBuffer();
     void bind() const;
     void unbind() const;

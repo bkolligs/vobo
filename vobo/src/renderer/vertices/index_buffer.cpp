@@ -3,7 +3,7 @@
 namespace vobo
 {
     
-IndexBuffer::IndexBuffer(unsigned int* indices, int count) : count_{count} {
+IndexBuffer::IndexBuffer(void* indices, int count) : count_{count} {
     glGenBuffers(1, &renderID_);
     bind();
     /* Link the data to the element/index array buffer indices */

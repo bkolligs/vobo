@@ -83,7 +83,8 @@ int Window::open() {
     /* Set the camera controller */
     PerspectiveController cameraController(events, 60, windowWidth_,
                                            windowHeight_);
-    Pyramid testPyramid(0.0f, 0.0f, 0.0f);
+    Pyramid testPyramid(2.0f, 0.0f, 0.0f);
+    Cube testCube(0.0f, 0.0f, -0.0f);
     /* Loop until the user closes the window_ */
     while (events.showWindow()) {
         renderer.clear(
@@ -91,6 +92,7 @@ int Window::open() {
         renderer.beginScene(cameraController.getCamera());
 
         renderer.draw(&testPyramid, shaders);
+        renderer.draw(&testCube, shaders);
 
         cameraController.onUpdate();
 

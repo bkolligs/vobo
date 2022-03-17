@@ -1,7 +1,6 @@
 #ifndef _pyramid_h_
 #define _pyramid_h_
 
-#include "glm/glm.hpp"
 #include "mesh_object.h"
 #include "vobo_pch.h"
 
