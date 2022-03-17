@@ -40,7 +40,8 @@ jobs:
           mkdir ${{github.workspace}}/build 
           cd ${{github.workspace}}/build 
           pwd
-          ls -l
+          ls -la 
+          ls -la ../
           cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} .. 
 
   Build:
