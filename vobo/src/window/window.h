@@ -7,20 +7,13 @@
 #include <GLFW/glfw3.h>
 // precompiled headers and common types
 #include "core.h"
-#include "stb_image.h"
 // custom abstractions
 #include "error_display.h"
-#include "index_buffer.h"
 #include "log.h"
-#include "orthographic_camera.h"
-#include "perspective_camera.h"
 #include "perspective_controller.h"
 #include "renderer.h"
 #include "shader.h"
-#include "texture.h"
-#include "vertex_array.h"
 #include "pyramid.h"
-#include "vertex_buffer.h"
 #include "window_events.h"
 
 namespace vobo {
@@ -33,6 +26,7 @@ class Window {
         /* Interactivity flags */
         bool verbose_;
         bool debug_;
+        bool vSync_ = true;
         std::string mainWindowName_ = "Vobo 2022v0.1";
 
     public:
@@ -52,6 +46,8 @@ class Window {
          * On Update
          */
         void onUpdate();
+        /* Set VSYNC */
+        void setVSync(bool vSync){vSync_ = vSync;}
 };
 
 }  // namespace vobo

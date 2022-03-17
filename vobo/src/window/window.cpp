@@ -46,7 +46,7 @@ int Window::initialize() {
     /* Make the window_'s context current */
     glfwMakeContextCurrent(window_);
     /* Set the swap interval to be in line with our monitor refresh rate */
-    glfwSwapInterval(1);
+    if (vSync_) glfwSwapInterval(1);
 
     /* Actually load the OpenGL specified functions with GLAD */
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -74,37 +74,9 @@ int Window::initialize() {
     return 0;
 }
 
-struct Vertex {
-        glm::vec3 position;
-        glm::vec3 color;
-};
-
 int Window::open() {
-    // /* Vertex buffer to hold the square */
-    // float squareVertices[] = {-0.5, -0.5, 0.0,  0.0, 0.0, -0.5, 0.5,
-    //                           0.0,  0.0,  1.0,  0.5, 0.5, 0.0,  1.0,
-    //                           1.0,  0.5,  -0.5, 0.0, 1.0, 0.0};
-    // uint squareIndices[]   = {0, 1, 2, 0, 2, 3};
-
-    // VertexBuffer squareBuffer(squareVertices, sizeof(squareVertices));
-    // VertexBufferLayout squareLayout;
-    // squareLayout.push<float>(3, "positions");
-    // squareLayout.push<float>(2, "texture_coords");
-    // VertexArray squareArray(debug_);
-    // IndexBuffer squareIB(squareIndices,
-    //                      sizeof(squareIndices) / sizeof(unsigned int));
-    // /* Associate the array with the buffers */
-    // squareArray.bind();
-    // squareBuffer.bind();
-    // squareArray.linkVBO(squareBuffer, squareLayout);
-
     /* Produce the shaders */
     Shader shaders(VOBO_SRC_DIR + "assets/shaders/pyramid.glsl", verbose_);
-    Shader shadersFlat(VOBO_SRC_DIR + "assets/shaders/square.glsl", verbose_);
-
-    // /* Handle the texture here */
-    Texture checkerboard(VOBO_SRC_DIR + "assets/textures/checkerboard.png");
-    checkerboard.bind(0);
 
     /* Create a renderer class */
     Renderer renderer;
