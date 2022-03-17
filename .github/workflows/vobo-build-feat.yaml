@@ -13,7 +13,7 @@ env:
 
 jobs:
   Setup:
-    name: Setup
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: AutoModality/action-clean@v1.1.0
@@ -28,8 +28,10 @@ jobs:
           printf "Building Vobo feature based on the event '${{github.event_name}}'\n" 
           printf "Building feature branch '${{github.ref}}'"
           ls -la
-      # - name: Install Build Dependencies
-        # run: sudo apt update && sudo apt upgrade && sudo apt install xorg-dev
+
+      - name: Install Build Dependencies
+        run: sudo apt update && sudo apt upgrade && sudo apt install xorg-dev
+
       - name: Configure CMake
         run: | 
           ls -la ${{github.workspace}}
@@ -40,6 +42,7 @@ jobs:
           mkdir ${{github.workspace}}/build 
           cd ${{github.workspace}}/build 
           cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} .. 
+
       - name: Build Vobo
         working-directory: ${{github.workspace}}/build
         # build the program with the given configuration
