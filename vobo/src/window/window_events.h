@@ -69,7 +69,7 @@ class WindowEvents {
         double getMouseY() { return inputs.getMouseY(); }
         double getMouseXVel() { return inputs.getMouseXVel(); }
         double getMouseYVel() { return inputs.getMouseYVel(); }
-        bool show() {
+        bool showWindow() {
             if (window_)
                 return not glfwWindowShouldClose(window_);
             else

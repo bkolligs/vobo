@@ -19,6 +19,7 @@
 #include "shader.h"
 #include "texture.h"
 #include "vertex_array.h"
+#include "pyramid.h"
 #include "vertex_buffer.h"
 #include "window_events.h"
 
@@ -32,7 +33,7 @@ class Window {
         /* Interactivity flags */
         bool verbose_;
         bool debug_;
-        std::string mainWindowName_ = "Oculobo 2022v0.1";
+        std::string mainWindowName_ = "Vobo 2022v0.1";
 
     public:
     	WindowEvents events;

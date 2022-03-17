@@ -48,12 +48,8 @@ int Window::initialize() {
     /* Set the swap interval to be in line with our monitor refresh rate */
     glfwSwapInterval(1);
 
-    /* Actually load the OpenGL specified functions with GLEW */
-    // if (glewInit() != GLEW_OK) {
-    //     VOBO_ERROR_LOG("Could not load GLEW!");
-    //     return -1;
-    // }
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
+    /* Actually load the OpenGL specified functions with GLAD */
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         VOBO_ERROR_LOG("Could not load OpenGL!");
         return -1;
     }
@@ -78,55 +74,29 @@ int Window::initialize() {
     return 0;
 }
 
+struct Vertex {
+        glm::vec3 position;
+        glm::vec3 color;
+};
+
 int Window::open() {
-    /* generate a buffer to store the pyramidVertices of the triangle */
-    float pyramidVertices[] = {
-        -0.5f, 0.0f,  0.5f, 0.1f,  0.0f,  0.02f, -0.5f, 0.0f,  -0.5f, 0.8f,
-        0.3f,  0.02f, 0.5f, 0.0f,  -0.5f, 0.2f,  0.8f,  0.12f, 0.5f,  0.0f,
-        0.5f,  0.8f,  0.3f, 0.02f, 0.0f,  0.8f,  0.0f,  0.1f,  0.1f,  0.92f,
-    };
+    // /* Vertex buffer to hold the square */
+    // float squareVertices[] = {-0.5, -0.5, 0.0,  0.0, 0.0, -0.5, 0.5,
+    //                           0.0,  0.0,  1.0,  0.5, 0.5, 0.0,  1.0,
+    //                           1.0,  0.5,  -0.5, 0.0, 1.0, 0.0};
+    // uint squareIndices[]   = {0, 1, 2, 0, 2, 3};
 
-    uint pyramidData[] = {0, 1, 2, 0, 2, 3, 0, 1, 4, 1, 2, 4, 2, 3, 4, 3, 0, 4};
-
-    /* Vertex buffer to hold the square */
-    float squareVertices[] = {-0.5, -0.5, 0.0,  0.0, 0.0, -0.5, 0.5,
-                              0.0,  0.0,  1.0,  0.5, 0.5, 0.0,  1.0,
-                              1.0,  0.5,  -0.5, 0.0, 1.0, 0.0};
-    uint squareIndices[]   = {0, 1, 2, 0, 2, 3};
-
-    VertexBuffer squareBuffer(squareVertices, sizeof(squareVertices));
-    VertexBufferLayout squareLayout;
-    squareLayout.push<float>(3, "positions");
-    squareLayout.push<float>(2, "texture_coords");
-    VertexArray squareArray(debug_);
-    IndexBuffer squareIB(squareIndices,
-                         sizeof(squareIndices) / sizeof(unsigned int));
-    /* Associate the array with the buffers */
-    squareArray.bind();
-    squareBuffer.bind();
-    squareArray.linkVBO(squareBuffer, squareLayout);
-
-    /* generate a vertex array and bind it */
-    VertexArray pyramid(debug_);
-    pyramid.bind();
-
-    VertexBuffer pyramidBuffer(pyramidVertices, sizeof(pyramidVertices));
-    pyramidBuffer.bind();
-
-    /* Generates an element array buffer object and links to the indices we are
-     * using*/
-    IndexBuffer pyramidIndices(pyramidData,
-                               sizeof(pyramidData) / sizeof(unsigned int));
-
-    /* Produce the pyramidLayout of the vertex array object so we know how to
-     * decode our list of floats! */
-    VertexBufferLayout pyramidLayout;
-    /* We "push" a new type of data onto the pyramidLayout, so it can calculate
-     * stride and offset automatically */
-    pyramidLayout.push<float>(3, "positions");
-    pyramidLayout.push<float>(3, "color");
-    /* link the vertex array and buffer objects */
-    pyramid.linkVBO(pyramidBuffer, pyramidLayout);
+    // VertexBuffer squareBuffer(squareVertices, sizeof(squareVertices));
+    // VertexBufferLayout squareLayout;
+    // squareLayout.push<float>(3, "positions");
+    // squareLayout.push<float>(2, "texture_coords");
+    // VertexArray squareArray(debug_);
+    // IndexBuffer squareIB(squareIndices,
+    //                      sizeof(squareIndices) / sizeof(unsigned int));
+    // /* Associate the array with the buffers */
+    // squareArray.bind();
+    // squareBuffer.bind();
+    // squareArray.linkVBO(squareBuffer, squareLayout);
 
     /* Produce the shaders */
     Shader shaders(VOBO_SRC_DIR + "assets/shaders/pyramid.glsl", verbose_);
@@ -136,35 +106,25 @@ int Window::open() {
     Texture checkerboard(VOBO_SRC_DIR + "assets/textures/checkerboard.png");
     checkerboard.bind(0);
 
-    /* Unbind to prevent accidental modifications */
-    pyramid.unbind();
-    pyramidBuffer.unbind();
-    pyramidIndices.unbind();
-
     /* Create a renderer class */
     Renderer renderer;
     /* Set the camera controller */
-    PerspectiveController cameraController(events, 60, windowWidth_, windowHeight_);
+    PerspectiveController cameraController(events, 60, windowWidth_,
+                                           windowHeight_);
+    Pyramid testPyramid(0.0f, 0.0f, 0.0f);
     /* Loop until the user closes the window_ */
-    while (events.show()) {
+    while (events.showWindow()) {
         renderer.clear(
             {159.0f / 255.0f, 195.0f / 255.0f, 252.0f / 255.0f, 0.1});
         renderer.beginScene();
 
-        /* Set the uniform to the texture slot */
-        renderer.draw(squareArray, squareIB, shadersFlat);
-        // shadersFlat.setUniformInt("uTexture", 0);
-        // model pose matrix
-        glm::mat4 model = glm::mat4(1.0f);
-        // camera extrinsics matrix
-        glm::mat4 view = glm::mat4(1.0f);
-        // projection intrinsics matrix
-        glm::mat4 proj = glm::mat4(1.0f);
-        renderer.draw(pyramid, pyramidIndices, shaders);
-        model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 2.0f));
-        model = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-        shaders.setUniformMat4F("uModel", model);
-        shaders.setUniformMat4F("uViewProjection", cameraController.getCamera().getViewProjection());
+        // renderer.draw(testPyramid.getVertexArray(),
+                    //   testPyramid.getIndexBuffer(), shaders);
+        renderer.draw(&testPyramid, shaders);
+        shaders.setUniformMat4F("uModel", testPyramid.getModelMatrix());
+        shaders.setUniformMat4F(
+            "uViewProjection",
+            cameraController.getCamera().getViewProjection());
 
         cameraController.onUpdate();
 
@@ -176,11 +136,11 @@ int Window::open() {
 }
 
 void Window::onUpdate() {
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window_);
+    /* Swap front and back buffers */
+    glfwSwapBuffers(window_);
 
-        /* Poll for and process events */
-        glfwPollEvents();
+    /* Poll for and process events */
+    glfwPollEvents();
 }
 
 }  // namespace vobo
