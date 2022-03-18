@@ -19,58 +19,58 @@ class Cube : public MeshObject {
 	private:
 	/* Add a vector of the vertices we are using */
 	std::vector<CubeVertex> vertices{
-		/* Vertex 1 */
-		{ .position={-0.5f, -0.5f, 0.5f},
-			.color={0.0f, 0.0f, 1.0f},
+		/* Vertex 0 */
+		{ .position={0.5f, 0.5f, -0.5f},
+			.color={1.0f, 1.0f, 0.0f},
 			.texCoords={0.0f, 0.0f}},
-		/* Vertex 2 */
-		{ .position={0.5f, -0.5f, 0.5f},
-			.color={1.0f, 0.0f, 1.0f},
-			.texCoords={0.5f, 0.0f}},
-		/* Vertex 3 */
+		/* Vertex 1 */
 		{ .position={0.5f, -0.5f, -0.5f},
 			.color={1.0f, 0.0f, 0.0f},
+			.texCoords={0.5f, 0.0f}},
+		/* Vertex 2 */
+		{ .position={-0.5f, 0.5f, -0.5f},
+			.color={0.0f, 1.0f, 0.0f},
 			.texCoords={0.5f, 0.5f}},
-		/* Vertex 4 */
+		/* Vertex 3 */
 		{ .position={-0.5f, -0.5f, -0.5f},
 			.color={0.0f, 0.0f, 0.0f},
 			.texCoords={0.5f, -0.5f}},
-		/* Vertex 5 */
-		{ .position={-0.5f, 0.5f, 0.5f},
-			.color={0.0f, 1.0f, 1.0f},
-			.texCoords={0.0f, 0.5f}},
-		/* Vertex 6 */
+		/* Vertex 4 */
 		{ .position={0.5f, 0.5f, 0.5f},
 			.color={1.0f, 1.0f, 1.0f},
+			.texCoords={0.0f, 0.5f}},
+		/* Vertex 5 */
+		{ .position={0.5f, -0.5f, 0.5f},
+			.color={1.0f, 0.0f, 1.0f},
 			.texCoords={0.0f, -0.5f}},
-		/* Vertex 7 */
-		{ .position={0.5f, 0.5f, -0.5f},
-			.color={1.0f, 1.0f, 0.0f},
+		/* Vertex 6 */
+		{ .position={-0.5f, 0.5f, 0.5f},
+			.color={0.0f, 1.0f, 1.0f},
 			.texCoords={-0.5f, 0.5f}},
-		/* Vertex 8 */
-		{ .position={-0.5f, 0.5f, -0.5f},
-			.color={0.0f, 1.0f, 0.0f},
+		/* Vertex 7 */
+		{ .position={-0.5f, -0.5f, 0.5f},
+			.color={0.0f, 0.0f, 1.0f},
 			.texCoords={1.0f, 1.0f}},
 	};
 	uint cubeData[3*12] = {
 		/* Face 1 */
-		1, 2, 5,
-		5, 6, 2,
+		0, 1, 3,
+		0, 2, 3,
 		/* Face 2 */
-		8, 4, 7,
-		7, 4, 3,
+		1, 3, 5,
+		3, 5, 7,
 		/* Face 3 */
-		2, 7, 3,
-		2, 7, 6,
+		2, 3, 7,
+		2, 6, 7,
 		/* Face 4 */
-		1, 6, 5,
-		5, 6, 8,
+		4, 5, 6,
+		5, 6, 7,
 		/* Face 5 */
-		5, 6, 8, 
-		6, 7, 8,
+		1, 4, 5,
+		0, 1, 4,
 		/* Face 6 */
-		1, 2, 4, 
-		2, 3, 4
+		0, 2, 4,
+		2, 4, 6,
 	};
 
 	/* Setup the vertex arrays and layouts for the cube */
