@@ -91,6 +91,8 @@ int Window::open() {
             {159.0f / 255.0f, 195.0f / 255.0f, 252.0f / 255.0f, 0.1});
         renderer.beginScene(cameraController.getCamera());
 
+        testCube.scale(1.0, 1.001, 1.0);
+
         renderer.draw(&testPyramid, shaders);
         renderer.draw(&testCube, shaders);
 

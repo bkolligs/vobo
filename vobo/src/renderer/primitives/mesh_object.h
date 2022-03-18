@@ -23,15 +23,22 @@ class MeshObject {
         /**
          * @brief Rotate the object around the local axis by the specified angle
          */
-        void rotate(float angle, const glm::vec3& axis) {
+        void rotate(float angle = 0.0, const glm::vec3& axis = {0.0f, 1.0f, 0.0f}) {
             objectPose_ = glm::rotate(objectPose_, angle, axis);
         }
 
         /**
          * @brief Translate the object by the provided vector
          */
-        void translate(float x, float y, float z) {
+        void translate(float x = 0.0, float y = 0.0, float z = 0.0) {
             objectPose_ = glm::translate(objectPose_, glm::vec3(x, y, z));
+        }
+
+        /**
+         * @brief Scale the object along a certain axis
+         */
+        void scale(float x = 1.0, float y = 1.0, float z = 1.0) {
+            objectPose_ = glm::scale(objectPose_, glm::vec3(x, y, z));
         }
 };
 
