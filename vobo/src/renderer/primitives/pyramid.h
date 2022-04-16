@@ -32,7 +32,7 @@ class Pyramid : public MeshObject {
                                              .color     = {0.8f, 0.3f, 0.02f},
                                              .texCoords = {0.0f, 0.5f}},
                                             /* Vertex 4 */
-                                            {.position  = {0.0f, 0.8f, 0.0f},
+                                            {.position  = {0.0f, 1.0f, 0.0f},
                                              .color     = {0.1f, 0.1f, 0.92f},
                                              .texCoords = {1.0f, 1.0f}}};
 
@@ -41,24 +41,23 @@ class Pyramid : public MeshObject {
 
         /* Setup the vertex arrays and layouts for the pyramid */
         VertexArray pyramidArray;
-        VertexBuffer pyramidBuffer;
+        StaticVertexBuffer pyramidBuffer;
         /* Generates an element array buffer object and links to the indices we
          * are using*/
-        IndexBuffer pyramidIndices;
+        StaticIndexBuffer pyramidIndices;
         /* Produce the pyramidLayout of the vertex array object so we know how
          * to decode our list of floats! */
         VertexBufferLayout pyramidLayout;
 
     public:
         Pyramid(float x = 0, float y = 0, float z = 0);
-        ~Pyramid();
         void bind() const override;
         void unbind() const override;
         bool modifyShader(Shader& shader) const override;
         const VertexArray& getVertexArray() const override {
             return pyramidArray;
         }
-        const IndexBuffer& getIndexBuffer() const override {
+        const StaticIndexBuffer& getIndexBuffer() const override {
             return pyramidIndices;
         }
 };

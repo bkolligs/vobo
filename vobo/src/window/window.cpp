@@ -84,17 +84,20 @@ int Window::open() {
     PerspectiveController cameraController(events, 60, windowWidth_,
                                            windowHeight_);
     Pyramid testPyramid(2.0f, 0.0f, 0.0f);
+    testPyramid.scale(1.0, 1.0, 1.0);
     Cube testCube(0.0f, 0.0f, -0.0f);
+    // IcoSphere testSphere;
     /* Loop until the user closes the window_ */
     while (events.showWindow()) {
         renderer.clear(
             {159.0f / 255.0f, 195.0f / 255.0f, 252.0f / 255.0f, 0.1});
         renderer.beginScene(cameraController.getCamera());
 
-        testCube.scale(1.0, 1.001, 1.0);
+        testCube.scale(1.0, 1.000, 1.01);
 
         renderer.draw(&testPyramid, shaders);
         renderer.draw(&testCube, shaders);
+        // renderer.draw(&testSphere, shaders);
 
         cameraController.onUpdate();
 

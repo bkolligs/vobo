@@ -20,7 +20,6 @@ Pyramid::Pyramid(float x, float y, float z)
     translate(x, y, z);
 }
 
-Pyramid::~Pyramid() {}
 void Pyramid::bind() const {
     pyramidArray.bind();
     pyramidIndices.bind();

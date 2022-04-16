@@ -37,7 +37,7 @@ void Renderer::draw(const MeshObject* object, Shader& shader) const {
     }
 }
 
-void Renderer::draw(const VertexArray& va, const IndexBuffer& eb,
+void Renderer::draw(const VertexArray& va, const StaticIndexBuffer& eb,
                     const Shader& shader) const {
     /* Bind the buffer objects to send to the GPU before drawing */
     va.bind();

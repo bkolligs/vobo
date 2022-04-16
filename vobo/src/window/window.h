@@ -2,13 +2,12 @@
 #define _vobo_window_h_
 
 #include "glad.h"
-#include "cube.h"
 #include <GLFW/glfw3.h>
 #include "core.h"
 #include "error_display.h"
 #include "log.h"
 #include "perspective_controller.h"
-#include "pyramid.h"
+#include "primitives.h"
 #include "renderer.h"
 #include "shader.h"
 #include "window_events.h"

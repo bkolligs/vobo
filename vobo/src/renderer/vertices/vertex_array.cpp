@@ -7,7 +7,7 @@ VertexArray::VertexArray(bool verbose) : verbose_{verbose} { glGenVertexArrays(1
 
 VertexArray::~VertexArray() { glDeleteVertexArrays(1, &renderID_); }
 
-void VertexArray::linkVBO(VertexBuffer& vbo, VertexBufferLayout& layout) {
+void VertexArray::linkVBO(StaticVertexBuffer& vbo, VertexBufferLayout& layout) {
 
 	/* Bind the current buffer */
     vbo.bind();

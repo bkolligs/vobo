@@ -17,13 +17,14 @@ class MeshObject {
         virtual void unbind() const                       = 0;
         virtual bool modifyShader(Shader& shader) const   = 0;
         virtual const VertexArray& getVertexArray() const = 0;
-        virtual const IndexBuffer& getIndexBuffer() const = 0;
+        virtual const StaticIndexBuffer& getIndexBuffer() const = 0;
 
         const glm::mat4& getModelMatrix() const { return objectPose_; }
         /**
          * @brief Rotate the object around the local axis by the specified angle
          */
-        void rotate(float angle = 0.0, const glm::vec3& axis = {0.0f, 1.0f, 0.0f}) {
+        void rotate(float angle           = 0.0,
+                    const glm::vec3& axis = {0.0f, 1.0f, 0.0f}) {
             objectPose_ = glm::rotate(objectPose_, angle, axis);
         }
 

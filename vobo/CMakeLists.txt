@@ -16,14 +16,14 @@ set(VOBO_CAMERAS_SRC
 )
 
 set(VOBO_RENDERER_PRIMITIVES_SRC
-	src/renderer/primitives/primitive_library.cpp
 	src/renderer/primitives/pyramid.cpp
 	src/renderer/primitives/cube.cpp
+	src/renderer/primitives/ico_sphere.cpp
 )
 
 set(VOBO_RENDERER_VERTICES_SRC
-	src/renderer/vertices/index_buffer.cpp
-	src/renderer/vertices/vertex_buffer.cpp
+	src/renderer/vertices/static_index_buffer.cpp
+	src/renderer/vertices/static_vertex_buffer.cpp
 	src/renderer/vertices/vertex_array.cpp
 	src/renderer/vertices/vertex_buffer_layout.cpp
 )
