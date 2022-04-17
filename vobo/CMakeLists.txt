@@ -9,52 +9,8 @@ if (${USE_SANITIZER})
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
 endif()
 
-set(VOBO_CAMERAS_SRC
-	src/cameras/orthographic_camera.cpp
-	src/cameras/perspective_camera.cpp
-	src/cameras/perspective_controller.cpp
-)
-
-set(VOBO_RENDERER_PRIMITIVES_SRC
-	src/renderer/primitives/pyramid.cpp
-	src/renderer/primitives/cube.cpp
-	src/renderer/primitives/ico_sphere.cpp
-)
-
-set(VOBO_RENDERER_VERTICES_SRC
-	src/renderer/vertices/static_index_buffer.cpp
-	src/renderer/vertices/static_vertex_buffer.cpp
-	src/renderer/vertices/vertex_array.cpp
-	src/renderer/vertices/vertex_buffer_layout.cpp
-)
-
-set(VOBO_RENDERER_SRC
-	src/renderer/shader.cpp
-	src/renderer/texture.cpp
-	src/renderer/renderer.cpp
-	${VOBO_RENDERER_VERTICES_SRC}
-	${VOBO_RENDERER_PRIMITIVES_SRC}
-)
-
-set(VOBO_CORE_SRC
-	src/core/error_display.cpp
-	src/core/vobo_math.cpp
-	)
-	
-set(VOBO_WINDOW_SRC
-	src/window/window_events.cpp
-	src/window/window.cpp
-)
-
 set(VOBO_INCLUDE_DIRS
 	src
-	src/core
-	src/cameras
-	src/vertices
-	src/renderer
-	src/renderer/vertices
-	src/renderer/primitives
-	src/window
 	deps/glm
 	deps/glad
 	deps/glfw
@@ -67,12 +23,13 @@ add_subdirectory(deps/glad)
 add_subdirectory(deps/glfw)
 
 
-add_library(vobo STATIC
-	${VOBO_CORE_SRC}
-	${VOBO_CAMERAS_SRC}
-	${VOBO_WINDOW_SRC}
-	${VOBO_RENDERER_SRC}
-)
+add_library(vobo STATIC)
+# collect all the source files from the various subfolders
+add_subdirectory(src/cameras)
+add_subdirectory(src/core)
+add_subdirectory(src/entities)
+add_subdirectory(src/renderer)
+add_subdirectory(src/window)
 
 target_include_directories(vobo PUBLIC
 	${VOBO_INCLUDE_DIRS}
