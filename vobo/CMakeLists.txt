@@ -46,3 +46,7 @@ target_link_libraries(vobo PUBLIC
 target_precompile_headers(vobo PUBLIC src/core/vobo_pch.h)
 # Set some preprocessor directives that are useful
 target_compile_definitions(vobo PUBLIC VOBO_SOURCE_DIR="${VOBO_SOURCE_DIR}/")
+
+
+# test the vobo library
+add_subdirectory(tests)
