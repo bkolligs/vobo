@@ -13,6 +13,7 @@ namespace vobo
 class VertexArray {
    private:
    	bool verbose_;
+    bool good_;
    public:
     unsigned int renderID_;
     VertexArray(bool verbose=false);
@@ -20,6 +21,7 @@ class VertexArray {
     void linkVBO(StaticVertexBuffer& vbo, VertexBufferLayout& layout);
     void bind() const;
     void unbind() const;
+    bool good() const {return good_; }
 };
 
 } // namespace vobo

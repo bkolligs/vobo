@@ -16,7 +16,9 @@ StaticVertexBuffer::~StaticVertexBuffer() { glDeleteBuffers(1, &renderID_); }
 
 void StaticVertexBuffer::setVertices(const void* vertices, size_t size) {
     if (isAllocated_) {
-        VOBO_WARNING_LOG("Overwriting data in current buffer: " << renderID_);
+        VOBO_WARNING_LOG(
+            "[StaticVertexBuffer] Overwriting data in current buffer: "
+            << renderID_);
         isAllocated_ = false;
     } else {
         glGenBuffers(1, &renderID_);

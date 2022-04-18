@@ -25,6 +25,7 @@ class StaticIndexBuffer {
         void unbind() const;
         int getCount() const { return count_; }
         unsigned int getID() const { return renderID_; }
+        bool good() const {return isAllocated_;}
 };
 
 }  // namespace vobo
