@@ -24,7 +24,7 @@ void StaticVertexBuffer::setVertices(const void* vertices, size_t size) {
         glGenBuffers(1, &renderID_);
     }
     /* Bind this buffer */
-    glBindBuffer(GL_ARRAY_BUFFER, renderID_);
+    bind();
     /* Place the vertices into the buffer */
     glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
     isAllocated_ = true;

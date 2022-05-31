@@ -57,7 +57,7 @@ int Window::initialize() {
     glViewport(0, 0, windowWidth_, windowHeight_);
 
     /* Initialize the window events and inputs callbacks */
-    int result = events.initialize(window_);
+    int result = events_.initialize(window_);
 
     /* Enable the error callback */
     if (debug_) {
@@ -78,27 +78,53 @@ int Window::open() {
     /* Produce the shaders */
     Shader shaders(VOBO_SRC_DIR + "assets/shaders/pyramid.glsl", verbose_);
 
-    /* Create a renderer class */
+    // std::vector<float> triangleVertices = {0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+    //                                        0.0f, 0.0f, -1.0f, 0.0f};
+
+    // std::vector<unsigned int> triangleIndices = {0, 1, 2};
+    float vertices[] = {
+     0.5f,  0.5f, 0.0f,  // top right
+     0.5f, -0.5f, 0.0f,  // bottom right
+    -0.5f, -0.5f, 0.0f,  // bottom left
+    -0.5f,  0.5f, 0.0f   // top left 
+    };
+    unsigned int indices[] = {  // note that we start from 0!
+        0, 1, 3,   // first triangle
+        1, 2, 3    // second triangle
+    };  
+
+    // /* Create a renderer class */
     Renderer renderer;
     /* Set the camera controller */
-    PerspectiveController cameraController(events, 60, windowWidth_,
+    PerspectiveController cameraController(events_, 60, windowWidth_,
                                            windowHeight_);
-    Pyramid testPyramid(2.0f, 0.0f, 0.0f);
-    testPyramid.scale(1.0, 1.0, 1.0);
-    Cube testCube(0.0f, 0.0f, -0.0f);
-    // IcoSphere testSphere;
-    /* Loop until the user closes the window_ */
-    while (events.showWindow()) {
+    uint VAO, VBO, EBO;
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+    glGenVertexArrays(1,&VAO);
+    glBindVertexArray(VAO);
+    // 2. copy our vertices array in a vertex buffer for OpenGL to use
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    // 3. copy our index array in a element buffer for OpenGL to use
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    // 4. then set the vertex attributes pointers
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);  
+
+    // ..:: Drawing code (in render loop) :: ..
+    // glUseProgram(shaderProgram);
+    while (events_.showWindow()) {
         renderer.clear(
             {159.0f / 255.0f, 195.0f / 255.0f, 252.0f / 255.0f, 0.1});
         renderer.beginScene(cameraController.getCamera());
 
-        testCube.scale(1.0, 1.000, 1.01);
-
-        renderer.draw(&testPyramid, shaders);
-        renderer.draw(&testCube, shaders);
-        // renderer.draw(&testSphere, shaders);
-
+        shaders.bind();
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
         cameraController.onUpdate();
 
         renderer.endScene();

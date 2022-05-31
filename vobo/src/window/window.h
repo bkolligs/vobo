@@ -24,9 +24,9 @@ class Window {
         bool debug_;
         bool vSync_                 = true;
         std::string mainWindowName_ = "Vobo 2022v0.1";
+        WindowEvents events_;
 
     public:
-        WindowEvents events;
         Window(int width = 640, int height = 480, bool verbose = true,
                bool debug = true);
         ~Window();
@@ -44,6 +44,7 @@ class Window {
         void onUpdate();
         /* Set VSYNC */
         void setVSync(bool vSync) { vSync_ = vSync; }
+        const WindowEvents & getEvents() const {return events_;}
 };
 
 }  // namespace vobo

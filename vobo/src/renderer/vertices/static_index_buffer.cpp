@@ -3,21 +3,22 @@
 namespace vobo {
 
 StaticIndexBuffer::StaticIndexBuffer(void* indices, int count) : count_{count} {
-    glGenBuffers(1, &renderID_);
-    bind();
-    /* Link the data to the element/index array buffer indices */
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), indices,
-                 GL_STATIC_DRAW);
-    isAllocated_ = true;
+    setIndices(indices, count);
 }
 
 void StaticIndexBuffer::setIndices(void* indices, int count) {
     if (isAllocated_) {
-        VOBO_WARNING_LOG("Overwriting data in current buffer: " << renderID_);
+        VOBO_WARNING_LOG(
+            "[StaticIndexBuffer] Overwriting data in current buffer: "
+            << renderID_);
         isAllocated_ = false;
     } else {
         glGenBuffers(1, &renderID_);
     }
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderID_);
+    int currentlyBound;
+    glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &currentlyBound);
+    VOBO_INFO_LOG("Currenlty bound! " << currentlyBound);
 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), indices,
                  GL_STATIC_DRAW);

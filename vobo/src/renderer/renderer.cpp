@@ -37,14 +37,14 @@ void Renderer::draw(const MeshObject* object, Shader& shader) const {
     }
 }
 
-void Renderer::draw(const VertexArray& va, const StaticIndexBuffer& eb,
+void Renderer::draw(const VertexArray& vertices, const StaticIndexBuffer& indices,
                     const Shader& shader) const {
     /* Bind the buffer objects to send to the GPU before drawing */
-    va.bind();
-    eb.bind();
+    vertices.bind();
+    indices.bind();
     shader.bind();
     /* Draw elements */
-    glDrawElements(GL_TRIANGLES, eb.getCount(), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, indices.getCount(), GL_UNSIGNED_INT, nullptr);
 }
 
 void Renderer::beginScene(const PerspectiveCamera & camera) {

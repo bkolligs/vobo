@@ -2,10 +2,10 @@
 
 namespace vobo {
 
-IcoSphere::IcoSphere(float x, float y, float z, int subdivisions)
-    : sphereBuffer( &vertices[0], vertices.size() * sizeof(IcoSphereVertex) ),
-      sphereIndices( &sphereData[0], sizeof(sphereData) / sizeof(unsigned int) ),
-      MeshObject( ) {
+IcoSphere::IcoSphere(float x, float y, float z, float radius, int subdivisions)
+    : sphereBuffer{&vertices[0], vertices.size() * sizeof(IcoSphereVertex)},
+      sphereIndices{&sphereData[0], sphereData.size()},
+      MeshObject() {
     sphereArray.bind();
     sphereBuffer.bind();
 
@@ -13,7 +13,18 @@ IcoSphere::IcoSphere(float x, float y, float z, int subdivisions)
     sphereLayout.push<float>(3, "color");
     sphereLayout.push<float>(2, "texture");
 
-    sphereArray.linkVBO(sphereBuffer, sphereLayout);
+    /* Create the IcoSphere at the appropriate subdivision level */
+
+    if (sphereBuffer.good() and sphereIndices.good())
+        sphereArray.linkVBO(sphereBuffer, sphereLayout);
+    else {
+        std::stringstream errorMessage;
+        errorMessage << VOBO_ERROR_STRING(
+            "[IcoSphere] Sphere vertex buffer is not in a valid state!");
+        throw std::runtime_error(errorMessage.str());
+    }
+
+    translate(x, y, z);
 }
 
 void IcoSphere::bind() const {
