@@ -4,7 +4,7 @@ namespace vobo {
 
 IcoSphere::IcoSphere(float x, float y, float z, float radius, int subdivisions)
     : sphereBuffer{&vertices[0], vertices.size() * sizeof(IcoSphereVertex)},
-      sphereIndices{&sphereData[0], sphereData.size()},
+      sphereIndices{&sphereData[0], (unsigned int) sphereData.size()},
       MeshObject() {
     sphereArray.bind();
     sphereBuffer.bind();

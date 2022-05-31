@@ -13,7 +13,7 @@ class IcoSphere : public MeshObject {
                 glm::vec2 texCoords;
         };
 
-        static constexpr float phi = (1 + sqrt(5))/2;
+        static constexpr float phi            = (1 + sqrt(5)) / 2;
         std::vector<IcoSphereVertex> vertices = {
             {
                 position : {0, 1, phi},
@@ -77,13 +77,32 @@ class IcoSphere : public MeshObject {
             },
         };
 
+        // clang-format off
         std::vector<uint> sphereData = {
+            // top level
             0, 2, 8, 
             0, 4, 8,
             0, 6, 10,
             0, 2, 10,
-            3, 2, 1,
+            // middle level
+            2, 5, 8,
+            5, 8, 9,
+            8, 9, 4, 
+            9, 4, 1,
+            4, 1, 6,
+            1, 6, 11,
+            6, 11, 10,
+            11, 10, 7,
+            10, 7, 2,
+            7, 2, 5,
+            // bottom
+            3, 5, 9,
+            3, 9, 1,
+            3, 1, 11,
+            3, 11, 7,
+            3, 5, 7,
         };
+        // clang-format on
 
         VertexArray sphereArray;
         StaticVertexBuffer sphereBuffer;
@@ -91,7 +110,7 @@ class IcoSphere : public MeshObject {
         VertexBufferLayout sphereLayout;
 
     public:
-        IcoSphere(float x = 0, float y = 0, float z = 0, float radius=1.0,
+        IcoSphere(float x = 0, float y = 0, float z = 0, float radius = 1.0,
                   int subdivisions = 1);
         ~IcoSphere() {}
         void bind() const override;
