@@ -15,11 +15,13 @@ class PerspectiveController {
         /* Panning speeds */
         float xPanSpeed_ = 0.001, yPanSpeed_ = 0.001;
         /* Zoom speed */
-        float zoomSpeed_ = 0.01;
+        float zoomSpeed_ = 0.05;
 
     public:
         PerspectiveController(WindowEvents& inputs, float fov, float width,
-                              float height, const glm::vec3 initialPosition = {0.0f, 0.0f, 3.0f});
+                              float height,
+                              const glm::vec3 initialPosition = {0.0f, 0.0f,
+                                                                 3.0f});
         ~PerspectiveController();
         /* Maybe add method to change camera properties after initialization? */
         void onUpdate();

@@ -23,7 +23,6 @@ void PerspectiveController::onUpdate() {
 
     /* Orbit around pivot */
     if (inputs_.isMousePressed(GLFW_MOUSE_BUTTON_LEFT)) {
-		VOBO_DEBUG_LOG("Pressed left!");
         float dXAngle = (2 * M_PI / windowWidth_),
               dYAngle = (M_PI / windowHeight_);
         float xAngle  = -xVel * dXAngle;
@@ -48,6 +47,7 @@ void PerspectiveController::onUpdate() {
         });
     }
 
+    /* Move the pivot in space */
     if (inputs_.isMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)) {
         camera_.setPivotPos({
             pivotPos.x + xVel * xPanSpeed_,

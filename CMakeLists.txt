@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(VOBO_FULL)
 
+enable_testing()
 add_subdirectory(vobo)
 add_subdirectory(sandbox)
 
