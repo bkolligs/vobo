@@ -2,6 +2,7 @@
 #define _ico_sphere_h_
 
 #include "mesh_object.h"
+#include "vobo_math.h"
 
 namespace vobo {
 
@@ -82,6 +83,7 @@ class IcoSphere : public MeshObject {
             // top level
             0, 2, 8, 
             0, 4, 8,
+            0, 4, 6,
             0, 6, 10,
             0, 2, 10,
             // middle level

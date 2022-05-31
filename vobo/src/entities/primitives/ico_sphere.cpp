@@ -3,11 +3,13 @@
 namespace vobo {
 
 IcoSphere::IcoSphere(float x, float y, float z, float radius, int subdivisions)
-    : sphereBuffer{&vertices[0], vertices.size() * sizeof(IcoSphereVertex)},
+      :sphereBuffer{},
       sphereIndices{&sphereData[0], (unsigned int) sphereData.size()},
       MeshObject() {
-    sphereArray.bind();
+    sphereBuffer.setVertices(&vertices[0], vertices.size() * sizeof(IcoSphereVertex));
+    sphereIndices.setIndices(&sphereData[0], (unsigned int) sphereData.size());
     sphereBuffer.bind();
+    sphereArray.bind();
 
     sphereLayout.push<float>(3, "positions");
     sphereLayout.push<float>(3, "color");

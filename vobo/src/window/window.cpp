@@ -77,31 +77,18 @@ int Window::initialize() {
 int Window::open() {
     /* Produce the shaders */
     Shader shaders(VOBO_SRC_DIR + "assets/shaders/pyramid.glsl", verbose_);
-
-    std::vector<float> triangleVertices = {0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
-                                           0.0f, 0.0f, -1.0f, 0.0f};
-
-    std::vector<unsigned int> triangleIndices = {0, 1, 2};
-
-
     /* Create a renderer class */
     Renderer renderer;
     /* Set the camera controller */
     PerspectiveController cameraController(events_, 60, windowWidth_,
                                            windowHeight_);
-    Pyramid testPyramid;
-    testPyramid.scale(1.0, 1.0, 1.0);
-    Cube testCube(0.0f, 0.0f, -0.0f);
-    IcoSphere testSphere(-1.0f, 0.0f, -1.0f);
+    IcoSphere testSphere(0.0f, 0.0f, 0.0f);
     /* Loop until the user closes the window_ */
-    shaders.bind();
     while (events_.showWindow()) {
         renderer.clear(
             {159.0f / 255.0f, 195.0f / 255.0f, 252.0f / 255.0f, 0.1});
         renderer.beginScene(cameraController.getCamera());
 
-        renderer.draw(&testPyramid, shaders);
-        renderer.draw(&testCube, shaders);
         renderer.draw(&testSphere, shaders);
 
         cameraController.onUpdate();

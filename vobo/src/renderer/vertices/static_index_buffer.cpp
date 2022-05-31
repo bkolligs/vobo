@@ -18,7 +18,7 @@ void StaticIndexBuffer::setIndices(void* indices, unsigned int count) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderID_);
     int currentlyBound;
     glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &currentlyBound);
-    VOBO_INFO_LOG("Currenlty bound! " << currentlyBound);
+    VOBO_INFO_LOG("Currently bound! " << currentlyBound);
 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), indices,
                  GL_STATIC_DRAW);
