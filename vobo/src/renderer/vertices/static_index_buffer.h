@@ -12,16 +12,16 @@ namespace vobo {
 class StaticIndexBuffer {
     public:
         unsigned int renderID_;
-        int count_;
+        unsigned int count_;
         bool isAllocated_ = false;
         /**
          * Generates an element buffer arrray and links it to indices
          */
         StaticIndexBuffer() = default;
-        StaticIndexBuffer(void* indices, int count);
-        static StaticIndexBuffer create(void * indices, int count);
+        StaticIndexBuffer(void* indices, unsigned int count);
+        static StaticIndexBuffer create(void * indices, unsigned int count);
         ~StaticIndexBuffer();
-        void setIndices(void* indices, int count);
+        void setIndices(void* indices, unsigned int count);
         void bind() const;
         void unbind() const;
         int getCount() const { return count_; }

@@ -2,11 +2,11 @@
 
 namespace vobo {
 
-StaticIndexBuffer::StaticIndexBuffer(void* indices, int count) : count_{count} {
+StaticIndexBuffer::StaticIndexBuffer(void* indices, unsigned int count) : count_{count} {
     setIndices(indices, count);
 }
 
-void StaticIndexBuffer::setIndices(void* indices, int count) {
+void StaticIndexBuffer::setIndices(void* indices, unsigned int count) {
     if (isAllocated_) {
         VOBO_WARNING_LOG(
             "[StaticIndexBuffer] Overwriting data in current buffer: "
